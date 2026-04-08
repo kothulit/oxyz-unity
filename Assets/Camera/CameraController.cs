@@ -12,12 +12,12 @@ public class CameraController
 
     [Header("Speeds")]
     [SerializeField] private float _orbitSpeed = 0.2f;
-    [SerializeField] private float _panSpeed = 0.01f;
+    [SerializeField] private float _panSpeed = 0.2f;
     [SerializeField] private float _zoomSpeed = 0.5f;
 
     [Header("Limits")]
-    [SerializeField] private float _minPitch = -80f;
-    [SerializeField] private float _maxPitch = 80f;
+    [SerializeField] private float _minPitch = -90f;
+    [SerializeField] private float _maxPitch = 90f;
     [SerializeField] private float _minDistance = 0.5f;
     [SerializeField] private float _maxDistance = 200f;
 
@@ -26,7 +26,7 @@ public class CameraController
         if (input.IsOrbiting)
         {
             _yaw += input.PointerDelta.x * _orbitSpeed;
-            _pitch -= input.PointerDelta.x * _orbitSpeed;
+            _pitch -= input.PointerDelta.y * _orbitSpeed;
             _pitch = Mathf.Clamp(_pitch, _minPitch, _maxPitch);
         }
 
@@ -37,7 +37,7 @@ public class CameraController
             Vector3 up = rotation * Vector3.up;
 
             Vector3 worldDelta =
-                (-right * input.PointerDelta.x + -up * input.PointerDelta.y) * _panSpeed * Mathf.Max(1f, _distance);
+                (-right * input.PointerDelta.x + -up * input.PointerDelta.y) * _panSpeed * Mathf.Max(1f, _distance/100);
 
             _pivot += worldDelta;
         }

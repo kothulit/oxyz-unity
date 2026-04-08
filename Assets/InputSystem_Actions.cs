@@ -1126,6 +1126,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""50392da2-8cf4-489a-9b43-694918005969"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1181,6 +1190,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a793d93-bf6f-4a4c-b539-5d0bc4a170fe"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1280,6 +1300,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_EditorCamera_OrbitModifier = m_EditorCamera.FindAction("OrbitModifier", throwIfNotFound: true);
         m_EditorCamera_Zoom = m_EditorCamera.FindAction("Zoom", throwIfNotFound: true);
         m_EditorCamera_FocusSelection = m_EditorCamera.FindAction("FocusSelection", throwIfNotFound: true);
+        m_EditorCamera_PointerPosition = m_EditorCamera.FindAction("PointerPosition", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1746,6 +1767,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_EditorCamera_OrbitModifier;
     private readonly InputAction m_EditorCamera_Zoom;
     private readonly InputAction m_EditorCamera_FocusSelection;
+    private readonly InputAction m_EditorCamera_PointerPosition;
     /// <summary>
     /// Provides access to input actions defined in input action map "EditorCamera".
     /// </summary>
@@ -1777,6 +1799,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "EditorCamera/FocusSelection".
         /// </summary>
         public InputAction @FocusSelection => m_Wrapper.m_EditorCamera_FocusSelection;
+        /// <summary>
+        /// Provides access to the underlying input action "EditorCamera/PointerPosition".
+        /// </summary>
+        public InputAction @PointerPosition => m_Wrapper.m_EditorCamera_PointerPosition;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1818,6 +1844,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @FocusSelection.started += instance.OnFocusSelection;
             @FocusSelection.performed += instance.OnFocusSelection;
             @FocusSelection.canceled += instance.OnFocusSelection;
+            @PointerPosition.started += instance.OnPointerPosition;
+            @PointerPosition.performed += instance.OnPointerPosition;
+            @PointerPosition.canceled += instance.OnPointerPosition;
         }
 
         /// <summary>
@@ -1844,6 +1873,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @FocusSelection.started -= instance.OnFocusSelection;
             @FocusSelection.performed -= instance.OnFocusSelection;
             @FocusSelection.canceled -= instance.OnFocusSelection;
+            @PointerPosition.started -= instance.OnPointerPosition;
+            @PointerPosition.performed -= instance.OnPointerPosition;
+            @PointerPosition.canceled -= instance.OnPointerPosition;
         }
 
         /// <summary>
@@ -2133,5 +2165,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFocusSelection(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointerPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointerPosition(InputAction.CallbackContext context);
     }
 }
