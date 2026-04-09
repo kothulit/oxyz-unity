@@ -1,0 +1,23 @@
+<ExtrusionGeometry id="space-001">
+  <InsertPoint x="0.0" y="0.0" z="0.0" />
+  <BottomOffset>0.0</BottomOffset>
+  <TopOffset>3.2</TopOffset>
+  <Contour>
+    <Segment>
+      <Start x="0.0" y="0.0" />
+      <End x="4.0" y="0.0" />
+    </Segment>
+    <Segment>
+      <Start x="4.0" y="0.0" />
+      <End x="4.0" y="6.0" />
+    </Segment>
+    <Segment>
+      <Start x="4.0" y="6.0" />
+      <End x="0.0" y="6.0" />
+    </Segment>
+    <Segment>
+      <Start x="0.0" y="6.0" />
+      <End x="0.0" y="0.0" />
+    </Segment>
+  </Contour>
+</ExtrusionGeometry>
