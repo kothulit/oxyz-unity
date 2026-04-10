@@ -5,27 +5,22 @@ public static class ExtrusionMeshBuilder
 {
     public static Mesh BuildMesh(ExtrusionGeometry geometry)
     {
-        var contour = ExtractOrderedContourPoints(geometry);
+        var contour = NormalizeContourWinding(ExtractOrderedContourPoints(geometry));
         if (contour.Count < 3)
             return null;
-
         float yBottom = geometry.InsertPoint.Y + geometry.BottomOffset;
         float yTop = geometry.InsertPoint.Y + geometry.TopOffset;
-
         var vertices = new List<Vector3>();
         var triangles = new List<int>();
-
         AddBottomFace(vertices, triangles, contour, geometry.InsertPoint, yBottom);
         AddTopFace(vertices, triangles, contour, geometry.InsertPoint, yTop);
         AddSideFaces(vertices, triangles, contour, geometry.InsertPoint, yBottom, yTop);
-
         var mesh = new Mesh();
         mesh.name = geometry.Id ?? "ExtrusionMesh";
         mesh.SetVertices(vertices);
         mesh.SetTriangles(triangles, 0);
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-
         return mesh;
     }
 
@@ -133,5 +128,28 @@ public static class ExtrusionMeshBuilder
         }
 
         return result;
+    }
+
+    private static float GetSignedArea(List<Point2D> contour)
+    {
+        float area = 0f;
+        for (int i = 0; i < contour.Count; i++)
+        {
+            Point2D current = contour[i];
+            Point2D next = contour[(i + 1) % contour.Count];
+            area += current.X * next.Y - next.X * current.Y;
+        }
+        return area * 0.5f;
+    }
+
+    private static List<Point2D> NormalizeContourWinding(List<Point2D> contour)
+    {
+        var normalized = new List<Point2D>(contour);
+        float signedArea = GetSignedArea(normalized);
+        if (signedArea < 0f)
+        {
+            normalized.Reverse();
+        }
+        return normalized;
     }
 }
