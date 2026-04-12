@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IEditorTool
 {
-    void Start();
+    void Activate();
     void Apply();
     void Cancel();
     void Tick();
