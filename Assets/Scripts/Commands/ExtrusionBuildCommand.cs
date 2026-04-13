@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class ExtrusionBuildCommand : MonoBehaviour
 {
+    [Header("State source")]
+    [SerializeField] private AppStateController _appStateController;
+
     [Header("Scene references")]
     [SerializeField] private Camera _sceneCamera;
     [SerializeField] private Material _material;
@@ -34,15 +37,18 @@ public class ExtrusionBuildCommand : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             CancelBuild();
+            _appStateController.SetState(AppState.Navigation);
             return;
         }
         if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
             FinishBuild();
+            _appStateController.SetState(AppState.Navigation);
             return;
         }
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            _appStateController.SetState(AppState.Creating);
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
             if (TryGetPointOnBuildPlane(out Vector3 worldPoint))
