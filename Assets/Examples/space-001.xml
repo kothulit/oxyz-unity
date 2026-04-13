@@ -13,10 +13,10 @@
     </Segment>
     <Segment>
       <Start x="4.0" y="6.0" />
-      <End x="0.0" y="6.0" />
+      <End x="3.0" y="6.0" />
     </Segment>
     <Segment>
-      <Start x="0.0" y="6.0" />
+      <Start x="3.0" y="6.0" />
       <End x="0.0" y="0.0" />
     </Segment>
   </Contour>
