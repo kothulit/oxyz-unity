@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ExtrusionGeometrySpawner : MonoBehaviour
 {
-    [SerializeField] private string relativePath = "Objects/Examples/space-001.xml";
+    [SerializeField] private string relativePath = "Examples/space-001.xml";
     [SerializeField] private Material material;
 
     private void Start()
