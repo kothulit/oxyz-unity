@@ -14,7 +14,7 @@ public class EditingInputAdapter : MonoBehaviour
     [SerializeField] private InputActionReference _pointerPosition;
     public bool IsActive =>
         _appStateController != null &&
-        _appStateController.CurrentState == AppState.Editing;
+        _appStateController.State.Value == AppState.Editing;
     private void OnEnable()
     {
         _clickSelect?.action.Enable();

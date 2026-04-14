@@ -1,3 +1,4 @@
+using R3;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,21 +23,13 @@ public class AppStateFrameController : MonoBehaviour
     {
         if (_appStateController != null)
         {
-            _appStateController.StateChanged += OnAppStateChanged;
-            ApplyStateColor(_appStateController.CurrentState);
-        }
-        else
-        {
-            ApplyColor(_fallbackColor);
+            _appStateController.State.Subscribe(OnAppStateChanged);
         }
     }
 
     private void OnDisable()
     {
-        if (_appStateController != null)
-        {
-            _appStateController.StateChanged -= OnAppStateChanged;
-        }
+        _appStateController.State.Dispose();
     }
 
     private void OnAppStateChanged(AppState state)

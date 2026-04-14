@@ -12,7 +12,7 @@ public class NavigationInputAdapter : MonoBehaviour
     [SerializeField] private InputActionReference _pointerPosition;
     public bool IsActive =>
         _appStateController != null &&
-        _appStateController.CurrentState == AppState.Navigation;
+        _appStateController.State.Value == AppState.Navigation;
     private void OnEnable()
     {
         _clickSelect?.action.Enable();

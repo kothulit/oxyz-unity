@@ -28,6 +28,11 @@ public class ExtrusionBuildCommand : MonoBehaviour
         _pointsWorld.Clear();
         _isBuilding = true;
         Debug.Log("Extrusion build started. LMB - add points, Enter - finish, Esc - cancel.");
+
+        if (_appStateController != null)
+        {
+            _appStateController.State.OnNext(AppState.Creating);
+        }
     }
 
     private void Update()
@@ -37,18 +42,15 @@ public class ExtrusionBuildCommand : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             CancelBuild();
-            _appStateController.SetState(AppState.Navigation);
             return;
         }
         if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
             FinishBuild();
-            _appStateController.SetState(AppState.Navigation);
             return;
         }
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            _appStateController.SetState(AppState.Creating);
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
             if (TryGetPointOnBuildPlane(out Vector3 worldPoint))
@@ -89,6 +91,7 @@ public class ExtrusionBuildCommand : MonoBehaviour
         _pointsWorld.Clear();
         _isBuilding = false;
         Debug.Log("Extrusion build finished.");
+        _appStateController.State.OnNext(AppState.Navigation);
     }
 
     private void CancelBuild()
@@ -96,6 +99,7 @@ public class ExtrusionBuildCommand : MonoBehaviour
         _pointsWorld.Clear();
         _isBuilding = false;
         Debug.Log("Extrusion build canceled.");
+        _appStateController.State.OnNext(AppState.Navigation);
     }
 
     private bool TryGetPointOnBuildPlane(out Vector3 worldPoint)

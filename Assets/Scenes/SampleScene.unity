@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc26c9ac2a6b2334c853fd084ec68578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtrusionBuildCommand
+  _appStateController: {fileID: 1865876939}
   _sceneCamera: {fileID: 963194227}
   _material: {fileID: 2100000, guid: 37e3d6b4d65f95d43bf7ef2d6a73c911, type: 2}
   _generatedRoot: {fileID: 0}

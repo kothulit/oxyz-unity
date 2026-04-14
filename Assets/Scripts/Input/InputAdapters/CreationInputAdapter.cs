@@ -12,7 +12,7 @@ public class CreationInputAdapter : MonoBehaviour
     [SerializeField] private InputActionReference _pointerPosition;
     public bool IsActive =>
         _appStateController != null &&
-        _appStateController.CurrentState == AppState.Creating;
+        _appStateController.State.Value == AppState.Creating;
     private void OnEnable()
     {
         _place?.action.Enable();
