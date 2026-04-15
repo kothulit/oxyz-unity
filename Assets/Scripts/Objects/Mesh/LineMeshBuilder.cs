@@ -19,24 +19,10 @@ public static class LineMeshBuilder
             z = geometry.End.Z
         };
 
-        Vector3 dir = (b - a).normalized;
-        Vector3 side = Vector3.Cross(dir, Vector3.up).normalized * 0.05f;
-
-        if (side.sqrMagnitude < 0.0001f)
-        {
-            side = Vector3.Cross(dir, Vector3.right).normalized * 0.05f;
-        }
-
         Vector3[] vertices = new Vector3[]
         {
-            a - side,
-            a + side,
-            b - side,
-            b + side
+            a, a, b, b
         };
-
-        // uv.x = 0 или 1 (начало/конец линии)
-        // uv.y = -1 или 1 (сторона линии)
 
         Vector2[] uv = new Vector2[4]
         {

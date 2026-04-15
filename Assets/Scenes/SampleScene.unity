@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineGeometrySpawner
   _relativePath: Examples/line-001.xml
-  _material: {fileID: 2100000, guid: 37e3d6b4d65f95d43bf7ef2d6a73c911, type: 2}
+  _material: {fileID: 2100000, guid: ef64124e2ad50f64298ba88c09623229, type: 2}
 --- !u!1 &375200458
 GameObject:
   m_ObjectHideFlags: 0
