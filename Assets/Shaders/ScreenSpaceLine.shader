@@ -1,7 +1,12 @@
-Shader "OXYZ/LineRenderer"
+Shader "Custom/ScreenSpaceLine"
 {
     Properties
     {
+        _Color ("Color", Color) = (1,1,1,1)
+        _Thickness ("Thickness (px)", Float) = 2
+        _DashSize ("Dash Size", Float) = 10
+        _GapSize ("Gap Size", Float) = 5
+        _UseDash ("Use Dash", Float) = 0
     }
 
     SubShader
@@ -18,76 +23,63 @@ Shader "OXYZ/LineRenderer"
 
             #include "UnityCG.cginc"
 
+            float4 _Color;
+            float _Thickness;
+            float _DashSize;
+            float _GapSize;
+            float _UseDash;
+
             struct appdata
             {
                 float3 vertex : POSITION;
-                float2 uv0 : TEXCOORD0; // t, side
-                float4 uv1 : TEXCOORD1; // A
-                float4 uv2 : TEXCOORD2; // B
-                float4 uv3 : TEXCOORD3; // thickness, dash, gap
-                float4 color : COLOR;
+                float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
                 float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float dashCoord : TEXCOORD1;
-                float4 color : COLOR;
+                float linePos : TEXCOORD1;
             };
 
             v2f vert(appdata v)
             {
                 v2f o;
 
-                float3 A = v.uv1.xyz;
-                float3 B = v.uv2.xyz;
+                float4 clip = UnityObjectToClipPos(v.vertex);
 
-                float4 clipA = UnityObjectToClipPos(A);
-                float4 clipB = UnityObjectToClipPos(B);
+                // экранное направление (используем uv.x как позицию вдоль линии)
+                float2 dir = float2(1,0);
 
-                float2 ndcA = clipA.xy / clipA.w;
-                float2 ndcB = clipB.xy / clipB.w;
-
-                float2 dir = normalize(ndcB - ndcA);
+                // перпендикул€р
                 float2 normal = float2(-dir.y, dir.x);
 
-                float thickness = v.uv3.x;
+                float pixelWidth = _Thickness / _ScreenParams.y;
 
-                float pixelSize = thickness / _ScreenParams.y;
-
-                float t = v.uv0.x;
-                float side = v.uv0.y;
-
-                float4 clip = lerp(clipA, clipB, t);
-
-                float2 offset = normal * side * pixelSize;
+                float2 offset = normal * v.uv.y * pixelWidth;
 
                 clip.xy += offset * clip.w;
 
                 o.pos = clip;
-                o.uv = v.uv0;
-                o.color = v.color;
-
-                // длина линии в пиксел€х
-                float2 screenDir = (ndcB - ndcA) * _ScreenParams.xy;
-                float length = length(screenDir);
-
-                o.dashCoord = t * length;
+                o.uv = v.uv;
+                o.linePos = v.uv.x;
 
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float dashSize = i.color.a; // можно по-другому передать
+                if (_UseDash > 0.5)
+                {
+                    float total = _DashSize + _GapSize;
+                    float m = fmod(i.linePos * 100, total);
 
-                // если нужен dash Ч лучше вынести в uv3.z
-                // здесь упрощЄнно
+                    if (m > _DashSize)
+                        discard;
+                }
 
-                return i.color;
+                return _Color;
             }
-
             ENDCG
         }
     }

@@ -2,52 +2,93 @@ Shader "Custom/LineRenderer"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
     }
+
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 200
+        Tags { "Queue"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite Off
 
-        CGPROGRAM
-        // Physically based Standard lighting model, and enable shadows on all light types
-        #pragma surface surf Standard fullforwardshadows
-
-        // Use shader model 3.0 target, to get nicer looking lighting
-        #pragma target 3.0
-
-        sampler2D _MainTex;
-
-        struct Input
+        Pass
         {
-            float2 uv_MainTex;
-        };
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
 
-        half _Glossiness;
-        half _Metallic;
-        fixed4 _Color;
+            #include "UnityCG.cginc"
 
-        // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-        // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-        // #pragma instancing_options assumeuniformscaling
-        UNITY_INSTANCING_BUFFER_START(Props)
-            // put more per-instance properties here
-        UNITY_INSTANCING_BUFFER_END(Props)
+            struct appdata
+            {
+                float3 vertex : POSITION;
+                float2 uv0 : TEXCOORD0; // t, side
+                float4 uv1 : TEXCOORD1; // A
+                float4 uv2 : TEXCOORD2; // B
+                float4 uv3 : TEXCOORD3; // thickness, dash, gap
+                float4 color : COLOR;
+            };
 
-        void surf (Input IN, inout SurfaceOutputStandard o)
-        {
-            // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-            o.Albedo = c.rgb;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
-            o.Alpha = c.a;
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float dashCoord : TEXCOORD1;
+                float4 color : COLOR;
+            };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+
+                float3 A = v.uv1.xyz;
+                float3 B = v.uv2.xyz;
+
+                float4 clipA = UnityObjectToClipPos(A);
+                float4 clipB = UnityObjectToClipPos(B);
+
+                float2 ndcA = clipA.xy / clipA.w;
+                float2 ndcB = clipB.xy / clipB.w;
+
+                float2 dir = normalize(ndcB - ndcA);
+                float2 normal = float2(-dir.y, dir.x);
+
+                float thickness = v.uv3.x;
+
+                float pixelSize = thickness / _ScreenParams.y;
+
+                float t = v.uv0.x;
+                float side = v.uv0.y;
+
+                float4 clip = lerp(clipA, clipB, t);
+
+                float2 offset = normal * side * pixelSize;
+
+                clip.xy += offset * clip.w;
+
+                o.pos = clip;
+                o.uv = v.uv0;
+                o.color = v.color;
+
+                // длина линии в пиксел€х
+                float2 screenDir = (ndcB - ndcA) * _ScreenParams.xy;
+                float length = length(screenDir);
+
+                o.dashCoord = t * length;
+
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                float dashSize = i.color.a; // можно по-другому передать
+
+                // если нужен dash Ч лучше вынести в uv3.z
+                // здесь упрощЄнно
+
+                return i.color;
+            }
+
+            ENDCG
         }
-        ENDCG
     }
-    FallBack "Diffuse"
 }

@@ -1235,50 +1235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b03bd812798e1bb4785437972dd7d753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraView
---- !u!1 &974027414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 974027416}
-  - component: {fileID: 974027415}
-  m_Layer: 0
-  m_Name: AppStateController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &974027415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 974027414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf91ea6d5722964c9304b678f1d412f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AppStateController
---- !u!4 &974027416
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 974027414}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.99487, y: -0, z: 0.78508}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1053630021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,50 +1800,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1616993270}
   m_CullTransparentMesh: 1
---- !u!1 &1663376673
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1663376675}
-  - component: {fileID: 1663376674}
-  m_Layer: 0
-  m_Name: Startup
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1663376674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663376673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f87efdc5f278a841b1763699245340e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Client.EcsStartup
---- !u!4 &1663376675
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663376673}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.56904, y: 0, z: 0.21654}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1865876937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1963,7 +1875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f42dbd37aa9734fbb0206423c12b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EditingInputAdapter
-  _appStateController: {fileID: 974027415}
+  _appStateController: {fileID: 1865876939}
   _clickSelect: {fileID: 3263965566796588057, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _beginDrag: {fileID: -3670039401578014436, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _confirm: {fileID: -4031806147466841055, guid: 289c1b55c9541489481df5cc06664110, type: 3}
@@ -1982,7 +1894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc40ebbb31a17e4cabf19b321ed30e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreationInputAdapter
-  _appStateController: {fileID: 974027415}
+  _appStateController: {fileID: 1865876939}
   _place: {fileID: 8994807494996000344, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _confirm: {fileID: -4031806147466841055, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _cancel: {fileID: -1123435403596231030, guid: 289c1b55c9541489481df5cc06664110, type: 3}
@@ -1999,7 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2e78c02781a3141a3c9ec3dfd9eeff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavigationInputAdapter
-  _appStateController: {fileID: 974027415}
+  _appStateController: {fileID: 1865876939}
   _clickSelect: {fileID: 3263965566796588057, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _multiSelectModifier: {fileID: -2048849626616669379, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _cancelSelection: {fileID: -1799341601618093570, guid: 289c1b55c9541489481df5cc06664110, type: 3}
@@ -2257,7 +2169,5 @@ SceneRoots:
   - {fileID: 1369892742}
   - {fileID: 21478305}
   - {fileID: 1878384637}
-  - {fileID: 974027416}
   - {fileID: 184586854}
-  - {fileID: 1663376675}
   - {fileID: 396774451}
