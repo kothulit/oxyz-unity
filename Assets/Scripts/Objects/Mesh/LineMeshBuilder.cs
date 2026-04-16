@@ -1,0 +1,51 @@
+using NUnit.Framework.Constraints;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class LineMeshBuilder
+{
+    public static Mesh BuildMesh(LineGeometry geometry)
+    {
+        Vector3 a = new Vector3()
+        {
+            x = geometry.Start.X,
+            y = geometry.Start.Y,
+            z = geometry.Start.Z
+        };
+
+        Vector3 b = new Vector3()
+        {
+            x = geometry.End.X,
+            y = geometry.End.Y,
+            z = geometry.End.Z
+        };
+
+        Vector3[] vertices = new Vector3[]
+        {
+            a, a, b, b
+        };
+
+        Vector2[] uv = new Vector2[4]
+        {
+            new Vector2(0, -1),
+            new Vector2(0, 1),
+            new Vector2(1, -1),
+            new Vector2(1, 1),
+        };
+
+        int[] triangles = new int[]
+        {
+            0, 1, 2,
+            2, 1, 3
+        };
+
+        Mesh mesh = new();
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.SetUVs(1, new List<Vector3> { a, a, b, b });
+        mesh.triangles = triangles;
+        
+        return mesh;
+    }
+
+}
