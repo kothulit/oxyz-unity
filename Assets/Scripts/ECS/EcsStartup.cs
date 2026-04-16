@@ -1,12 +1,15 @@
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Client {
-    sealed class EcsStartup : MonoBehaviour {
+namespace Client
+{
+    sealed class EcsStartup : MonoBehaviour
+    {
         EcsWorld _world;
         IEcsSystems _systems;
 
-        void Start () {
+        void Start ()
+        {
             _world = new EcsWorld ();
             _systems = new EcsSystems (_world);
             _systems
@@ -24,13 +27,16 @@ namespace Client {
                 .Init ();
         }
 
-        void Update () {
+        void Update ()
+        {
             // process systems here.
             _systems?.Run ();
         }
 
-        void OnDestroy () {
-            if (_systems != null) {
+        void OnDestroy ()
+        {
+            if (_systems != null)
+            {
                 // list of custom worlds will be cleared
                 // during IEcsSystems.Destroy(). so, you
                 // need to save it here if you need.
@@ -41,7 +47,8 @@ namespace Client {
             // cleanup custom worlds here.
 
             // cleanup default world.
-            if (_world != null) {
+            if (_world != null)
+            {
                 _world.Destroy ();
                 _world = null;
             }

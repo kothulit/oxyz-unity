@@ -20,6 +20,13 @@ public class LineGeometrySpawner : MonoBehaviour
         var meshFilter = go.AddComponent<MeshFilter>();
         var meshRenderer = go.AddComponent<MeshRenderer>();
         meshFilter.sharedMesh = mesh;
+
+        _material.SetFloat("_Thickness", 5f);
+        _material.SetFloat("_UseDash", 1);
+        _material.SetFloat("_DashSize", 10);
+        _material.SetFloat("_GapSize", 5);
+
         meshRenderer.sharedMaterial = _material;
+        meshRenderer.material = _material;
     }
 }

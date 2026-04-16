@@ -1,4 +1,5 @@
 using NUnit.Framework.Constraints;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class LineMeshBuilder
@@ -41,6 +42,7 @@ public static class LineMeshBuilder
         Mesh mesh = new();
         mesh.vertices = vertices;
         mesh.uv = uv;
+        mesh.SetUVs(1, new List<Vector3> { a, a, b, b });
         mesh.triangles = triangles;
         
         return mesh;
