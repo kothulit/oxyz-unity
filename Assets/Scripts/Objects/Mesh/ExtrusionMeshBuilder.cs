@@ -16,7 +16,7 @@ public static class ExtrusionMeshBuilder
         AddTopFace(vertices, triangles, contour, geometry.InsertPoint, yTop);
         AddSideFaces(vertices, triangles, contour, geometry.InsertPoint, yBottom, yTop);
         var mesh = new Mesh();
-        mesh.name = geometry.Id ?? "ExtrusionMesh";
+        mesh.name = geometry.Id.ToString() ?? "ExtrusionMesh";
         mesh.SetVertices(vertices);
         mesh.SetTriangles(triangles, 0);
         mesh.RecalculateNormals();
