@@ -16,7 +16,7 @@ public class ExtrusionGeometrySpawner : MonoBehaviour
             Debug.LogError("Failed to build mesh from geometry.");
             return;
         }
-        var go = new GameObject(geometry.Id ?? "ExtrusionObject");
+        var go = new GameObject(geometry.Id.ToString() ?? "ExtrusionObject");
         var meshFilter = go.AddComponent<MeshFilter>();
         var meshRenderer = go.AddComponent<MeshRenderer>();
         meshFilter.sharedMesh = mesh;

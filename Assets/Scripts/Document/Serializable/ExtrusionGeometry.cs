@@ -7,7 +7,11 @@ using System.Xml.Serialization;
 public class ExtrusionGeometry
 {
     [XmlAttribute("id")]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public int Id { get; private set; }
+
+    [XmlAttribute("guid")]
+    public string GUID { get; set; } = Guid.NewGuid().ToString();
+
     [XmlElement("InsertPoint")]
     public Point3D InsertPoint { get; set; } = new();
     [XmlElement("BottomOffset")]
@@ -17,6 +21,12 @@ public class ExtrusionGeometry
     [XmlArray("Contour")]
     [XmlArrayItem("Segment")]
     public List<LineSegment2D> Contour { get; set; } = new();
+
+    public ExtrusionGeometry(int id)
+    {
+        Id = id;
+    }
+
     public bool IsValid()
     {
         if (Contour == null || Contour.Count < 3)

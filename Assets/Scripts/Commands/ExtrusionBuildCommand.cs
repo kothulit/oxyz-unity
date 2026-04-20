@@ -16,7 +16,6 @@ public class ExtrusionBuildCommand : MonoBehaviour
     [Header("Extrusion settings")]
     [SerializeField] private float _bottomOffset = 0f;
     [SerializeField] private float _topOffset = 3f;
-    [SerializeField] private string _objectIdPrefix = "extrusion";
 
     private readonly List<Vector3> _pointsWorld = new();
 
@@ -122,9 +121,8 @@ public class ExtrusionBuildCommand : MonoBehaviour
     private ExtrusionGeometry BuildGeometryFromPoints(List<Vector3> pointsWorld)
     {
         Vector3 origin = pointsWorld[0];
-        var geometry = new ExtrusionGeometry
+        var geometry = new ExtrusionGeometry(_objectCounter++)
         {
-            Id = $"{_objectIdPrefix}-{_objectCounter++:000}",
             InsertPoint = new Point3D
             {
                 X = origin.x,
@@ -157,7 +155,7 @@ public class ExtrusionBuildCommand : MonoBehaviour
     }
     private void CreateSceneObject(ExtrusionGeometry geometry, Mesh mesh)
     {
-        var go = new GameObject(geometry.Id);
+        var go = new GameObject(geometry.Id.ToString());
         if (_generatedRoot != null)
         {
             go.transform.SetParent(_generatedRoot, false);
