@@ -1,7 +1,6 @@
 using R3;
-using UnityEngine;
 
-public class AppStateController : MonoBehaviour
+public class AppStateController
 {
     public ReactiveProperty<AppState> State = new(AppState.Navigation);
 }

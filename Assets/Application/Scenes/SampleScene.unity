@@ -282,7 +282,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc26c9ac2a6b2334c853fd084ec68578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtrusionBuildCommand
-  _appStateController: {fileID: 1865876939}
   _sceneCamera: {fileID: 963194227}
   _generatedRoot: {fileID: 0}
   _bottomOffset: 0
@@ -524,7 +523,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1865876938}
   - {fileID: 673344454}
   - {fileID: 1615169423}
   - {fileID: 26114106}
@@ -2791,7 +2789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1095956585}
-  - component: {fileID: 1095956586}
+  - component: {fileID: 1095956587}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -2814,7 +2812,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1095956586
+--- !u!114 &1095956587
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2823,9 +2821,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1095956584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90e59df8d404bb2479b0e4731d3d3391, type: 3}
+  m_Script: {fileID: 11500000, guid: 4101ac032618b9244a2d53a98e0af0cf, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AppEntryPoint
+  m_EditorClassIdentifier: Assembly-CSharp::AppLifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _appStateFrameController: {fileID: 1615169424}
 --- !u!1 &1103066712
 GameObject:
   m_ObjectHideFlags: 0
@@ -3769,7 +3772,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4025680c233848a499e8a8e36f27c33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AppStateFrameController
-  _appStateController: {fileID: 1865876939}
   _topBorder: {fileID: 1911408022}
   _bottomBorder: {fileID: 2044958680}
   _leftBorder: {fileID: 1103066714}
@@ -3917,50 +3919,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1616993270}
   m_CullTransparentMesh: 1
---- !u!1 &1865876937
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1865876938}
-  - component: {fileID: 1865876939}
-  m_Layer: 0
-  m_Name: StateMachine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1865876938
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1865876937}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 184586854}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1865876939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1865876937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf91ea6d5722964c9304b678f1d412f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AppStateController
 --- !u!1 &1878384633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3992,7 +3950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f42dbd37aa9734fbb0206423c12b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EditingInputAdapter
-  _appStateController: {fileID: 1865876939}
   _clickSelect: {fileID: 3263965566796588057, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _beginDrag: {fileID: -3670039401578014436, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _confirm: {fileID: -4031806147466841055, guid: 289c1b55c9541489481df5cc06664110, type: 3}
@@ -4011,7 +3968,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc40ebbb31a17e4cabf19b321ed30e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreationInputAdapter
-  _appStateController: {fileID: 1865876939}
   _place: {fileID: 8994807494996000344, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _confirm: {fileID: -4031806147466841055, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _cancel: {fileID: -1123435403596231030, guid: 289c1b55c9541489481df5cc06664110, type: 3}
@@ -4028,7 +3984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2e78c02781a3141a3c9ec3dfd9eeff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavigationInputAdapter
-  _appStateController: {fileID: 1865876939}
   _clickSelect: {fileID: 3263965566796588057, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _multiSelectModifier: {fileID: -2048849626616669379, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   _cancelSelection: {fileID: -1799341601618093570, guid: 289c1b55c9541489481df5cc06664110, type: 3}

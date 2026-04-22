@@ -1,11 +1,11 @@
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 public class AppStateFrameController : MonoBehaviour
 {
-    [Header("State source")]
-    [SerializeField] private AppStateController _appStateController;
+    private AppStateController _appStateController;
 
     [Header("Frame images")]
     [SerializeField] private Image _topBorder;
@@ -18,6 +18,12 @@ public class AppStateFrameController : MonoBehaviour
     [SerializeField] private Color _editingColor = Color.red;
     [SerializeField] private Color _creatingColor = Color.blue;
     [SerializeField] private Color _fallbackColor = Color.gray;
+
+    [Inject]
+    private void Construct(AppStateController appStateController)
+    {
+        _appStateController = appStateController;
+    }
 
     private void OnEnable()
     {
