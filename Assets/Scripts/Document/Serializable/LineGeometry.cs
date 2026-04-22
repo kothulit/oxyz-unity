@@ -1,17 +1,13 @@
-using System;
 using System.Xml.Serialization;
 
 [XmlRoot("LineGeometry")]
 public class LineGeometry
 {
-    [XmlAttribute("id")]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
     [XmlElement("Start")]
-    public Point3D Start { get; set; } = new();
+    public Point3D Start { get; set; }
 
     [XmlElement("End")]
-    public Point3D End { get; set; } = new();
+    public Point3D End { get; set; }
 
     public bool IsValid()
     {

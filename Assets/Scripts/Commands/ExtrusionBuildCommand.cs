@@ -129,8 +129,8 @@ public class ExtrusionBuildCommand : MonoBehaviour
                 Y = 0f,
                 Z = origin.z
             },
-            BottomOffset = _bottomOffset,
-            TopOffset = _topOffset,
+            Bottom = _bottomOffset,
+            Top = _topOffset,
             Contour = new List<LineSegment2D>()
         };
         for (int i = 0; i < pointsWorld.Count; i++)

@@ -1,38 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
-[XmlRoot("ExtrusionGeometry")]
+[XmlRoot("Extrusion")]
 public class ExtrusionGeometry
 {
-    [XmlAttribute("id")]
-    public int Id { get; private set; }
+    [XmlAttribute("bottom")]
+    public float Bottom { get; set; }
 
-    [XmlAttribute("guid")]
-    public string GUID { get; set; } = Guid.NewGuid().ToString();
+    [XmlAttribute("top")]
+    public float Top { get; set; }
 
-    [XmlElement("InsertPoint")]
-    public Point3D InsertPoint { get; set; } = new();
-    [XmlElement("BottomOffset")]
-    public float BottomOffset { get; set; }
-    [XmlElement("TopOffset")]
-    public float TopOffset { get; set; }
-    [XmlArray("Contour")]
-    [XmlArrayItem("Segment")]
-    public List<LineSegment2D> Contour { get; set; } = new();
-
-    public ExtrusionGeometry(int id)
-    {
-        Id = id;
-    }
-
-    public bool IsValid()
-    {
-        if (Contour == null || Contour.Count < 3)
-            return false;
-        if (TopOffset <= BottomOffset)
-            return false;
-        return true;
-    }
+    [XmlArray("Loop")]
+    [XmlArrayItem("CheckPoint")]
+    public List<CheckPoint> Loop { get; set; } = new();
 }

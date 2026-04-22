@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-[XmlRoot("Document")]
-public class Document
+[XmlRoot("Style")]
+public class Style
 {
     [XmlAttribute("name")]
     public string Name { get; set; } = "NewDocument";
@@ -11,10 +11,10 @@ public class Document
     [XmlAttribute("guid")]
     public string GUID { get; set; } = Guid.NewGuid().ToString();
 
-    [XmlArray("DefaultStyles")]
-    [XmlArrayItem("DefaultStyle")]
-    public List<DefaultStyle> Defaults = new();
+    [XmlAttribute("category")]
+    public string Category { get; set; } = "None";
 
-    [XmlElement("Site")]
-    public SiteElement Site = new();
+    [XmlArray("Parameters")]
+    [XmlArrayItem("Parameter")]
+    public List<Parameter> Parameters { get; set; } = new();
 }
