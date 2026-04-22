@@ -5,23 +5,23 @@ public static class ExtrusionMeshBuilder
 {
     public static Mesh BuildMesh(ExtrusionGeometry geometry)
     {
-        var contour = NormalizeContourWinding(ExtractOrderedContourPoints(geometry));
-        if (contour.Count < 3)
-            return null;
-        float yBottom = geometry.InsertPoint.Y + geometry.BottomOffset;
-        float yTop = geometry.InsertPoint.Y + geometry.TopOffset;
-        var vertices = new List<Vector3>();
-        var triangles = new List<int>();
-        AddBottomFace(vertices, triangles, contour, geometry.InsertPoint, yBottom);
-        AddTopFace(vertices, triangles, contour, geometry.InsertPoint, yTop);
-        AddSideFaces(vertices, triangles, contour, geometry.InsertPoint, yBottom, yTop);
-        var mesh = new Mesh();
-        mesh.name = geometry.Id.ToString() ?? "ExtrusionMesh";
-        mesh.SetVertices(vertices);
-        mesh.SetTriangles(triangles, 0);
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-        return mesh;
+        //var contour = NormalizeContourWinding(ExtractOrderedContourPoints(geometry));
+        //if (contour.Count < 3)
+        //    return null;
+        //float yBottom = geometry.InsertPoint.Y + geometry.BottomOffset;
+        //float yTop = geometry.InsertPoint.Y + geometry.TopOffset;
+        //var vertices = new List<Vector3>();
+        //var triangles = new List<int>();
+        //AddBottomFace(vertices, triangles, contour, geometry.InsertPoint, yBottom);
+        //AddTopFace(vertices, triangles, contour, geometry.InsertPoint, yTop);
+        //AddSideFaces(vertices, triangles, contour, geometry.InsertPoint, yBottom, yTop);
+        //var mesh = new Mesh();
+        //mesh.name = geometry.Id.ToString() ?? "ExtrusionMesh";
+        //mesh.SetVertices(vertices);
+        //mesh.SetTriangles(triangles, 0);
+        //mesh.RecalculateNormals();
+        //mesh.RecalculateBounds();
+        return new Mesh(); //mesh;
     }
 
     private static void AddBottomFace(
@@ -117,17 +117,17 @@ public static class ExtrusionMeshBuilder
 
     private static List<Point2D> ExtractOrderedContourPoints(ExtrusionGeometry geometry)
     {
-        var result = new List<Point2D>();
+        //var result = new List<Point2D>();
 
-        if (geometry?.Contour == null || geometry.Contour.Count == 0)
-            return result;
+        //if (geometry?.Contour == null || geometry.Contour.Count == 0)
+        //    return result;
 
-        for (int i = 0; i < geometry.Contour.Count; i++)
-        {
-            result.Add(geometry.Contour[i].Start);
-        }
+        //for (int i = 0; i < geometry.Contour.Count; i++)
+        //{
+        //    result.Add(geometry.Contour[i].Start);
+        //}
 
-        return result;
+        return new List<Point2D>();  //result;
     }
 
     private static float GetSignedArea(List<Point2D> contour)

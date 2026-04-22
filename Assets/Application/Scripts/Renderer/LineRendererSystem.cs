@@ -20,8 +20,8 @@ public class LineRendererSystem : MonoBehaviour
 
     void LateUpdate()
     {
-        BuildMesh();
-        Graphics.DrawMesh(_mesh, Matrix4x4.identity, _material, 0);
+        //BuildMesh();
+        //Graphics.DrawMesh(_mesh, Matrix4x4.identity, _material, 0);
     }
 
     void BuildMesh()

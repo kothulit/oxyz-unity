@@ -8,25 +8,25 @@ public class LineGeometrySpawner : MonoBehaviour
 
     private void Start()
     {
-        string path = Path.Combine(Application.dataPath, _relativePath);
-        LineGeometry geometry = LineGeometryXmlLoader.LoadFromFile(path);
-        Mesh mesh = LineMeshBuilder.BuildMesh(geometry);
-        if (mesh == null)
-        {
-            Debug.LogError("Failed to build mesh from geometry.");
-            return;
-        }
-        var go = new GameObject(geometry.Id ?? "LineObject");
-        var meshFilter = go.AddComponent<MeshFilter>();
-        var meshRenderer = go.AddComponent<MeshRenderer>();
-        meshFilter.sharedMesh = mesh;
+        //string path = Path.Combine(Application.dataPath, _relativePath);
+        //LineGeometry geometry = LineGeometryXmlLoader.LoadFromFile(path);
+        //Mesh mesh = LineMeshBuilder.BuildMesh(geometry);
+        //if (mesh == null)
+        //{
+        //    Debug.LogError("Failed to build mesh from geometry.");
+        //    return;
+        //}
+        //var go = new GameObject(geometry.Id ?? "LineObject");
+        //var meshFilter = go.AddComponent<MeshFilter>();
+        //var meshRenderer = go.AddComponent<MeshRenderer>();
+        //meshFilter.sharedMesh = mesh;
 
-        _material.SetFloat("_Thickness", 5f);
-        _material.SetFloat("_UseDash", 1);
-        _material.SetFloat("_DashSize", 10);
-        _material.SetFloat("_GapSize", 5);
+        //_material.SetFloat("_Thickness", 5f);
+        //_material.SetFloat("_UseDash", 1);
+        //_material.SetFloat("_DashSize", 10);
+        //_material.SetFloat("_GapSize", 5);
 
-        meshRenderer.sharedMaterial = _material;
-        meshRenderer.material = _material;
+        //meshRenderer.sharedMaterial = _material;
+        //meshRenderer.material = _material;
     }
 }

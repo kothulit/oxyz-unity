@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using static Unity.VectorGraphics.VectorUtils;
 
 public class ExtrusionBuildCommand : MonoBehaviour
 {
@@ -120,49 +121,49 @@ public class ExtrusionBuildCommand : MonoBehaviour
     }
     private ExtrusionGeometry BuildGeometryFromPoints(List<Vector3> pointsWorld)
     {
-        Vector3 origin = pointsWorld[0];
-        var geometry = new ExtrusionGeometry(_objectCounter++)
-        {
-            InsertPoint = new Point3D
-            {
-                X = origin.x,
-                Y = 0f,
-                Z = origin.z
-            },
-            Bottom = _bottomOffset,
-            Top = _topOffset,
-            Contour = new List<LineSegment2D>()
-        };
-        for (int i = 0; i < pointsWorld.Count; i++)
-        {
-            Vector3 startWorld = pointsWorld[i];
-            Vector3 endWorld = pointsWorld[(i + 1) % pointsWorld.Count];
-            geometry.Contour.Add(new LineSegment2D
-            {
-                Start = new Point2D
-                {
-                    X = startWorld.x - origin.x,
-                    Y = startWorld.z - origin.z
-                },
-                End = new Point2D
-                {
-                    X = endWorld.x - origin.x,
-                    Y = endWorld.z - origin.z
-                }
-            });
-        }
-        return geometry;
+        //Vector3 origin = pointsWorld[0];
+        //var geometry = new ExtrusionGeometry(_objectCounter++)
+        //{
+        //    InsertPoint = new Point3D
+        //    {
+        //        X = origin.x,
+        //        Y = 0f,
+        //        Z = origin.z
+        //    },
+        //    Bottom = _bottomOffset,
+        //    Top = _topOffset,
+        //    Contour = new List<LineSegment2D>()
+        //};
+        //for (int i = 0; i < pointsWorld.Count; i++)
+        //{
+        //    Vector3 startWorld = pointsWorld[i];
+        //    Vector3 endWorld = pointsWorld[(i + 1) % pointsWorld.Count];
+        //    geometry.Contour.Add(new LineSegment2D
+        //    {
+        //        Start = new Point2D
+        //        {
+        //            X = startWorld.x - origin.x,
+        //            Y = startWorld.z - origin.z
+        //        },
+        //        End = new Point2D
+        //        {
+        //            X = endWorld.x - origin.x,
+        //            Y = endWorld.z - origin.z
+        //        }
+        //    });
+        //}
+        return new ExtrusionGeometry(); //geometry;
     }
     private void CreateSceneObject(ExtrusionGeometry geometry, Mesh mesh)
     {
-        var go = new GameObject(geometry.Id.ToString());
-        if (_generatedRoot != null)
-        {
-            go.transform.SetParent(_generatedRoot, false);
-        }
-        var meshFilter = go.AddComponent<MeshFilter>();
-        var meshRenderer = go.AddComponent<MeshRenderer>();
-        meshFilter.sharedMesh = mesh;
-        meshRenderer.sharedMaterial = _material;
+        //var go = new GameObject(geometry.Id.ToString());
+        //if (_generatedRoot != null)
+        //{
+        //    go.transform.SetParent(_generatedRoot, false);
+        //}
+        //var meshFilter = go.AddComponent<MeshFilter>();
+        //var meshRenderer = go.AddComponent<MeshRenderer>();
+        //meshFilter.sharedMesh = mesh;
+        //meshRenderer.sharedMaterial = _material;
     }
 }
