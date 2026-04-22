@@ -1,0 +1,5 @@
+<Style name="Кирпичная кладка 250мм" guid="b2eeba69-1186-470b-a487-904b7412d435" category="Wall">
+  <Parameters>
+    <Parameter name="Material" value="Кирпичная кладка" />
+  </Parameters>
+</Style>

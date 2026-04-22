@@ -1,0 +1,23 @@
+<Document name="XMLTestProject" guid="4d2b8b39-6e8c-4d3e-9d74-1d9a22ce7a11">
+  <DefaultStyles>
+    <DefaultStyle category="Space" style="Помещение" />
+    <DefaultStyle category="Wall" style="Кирпичная кладка 250мм" />
+  </DefaultStyles>
+  <Site>
+    <Buildings> 
+      <Building name="Тестовый дом" guid="6cec33aa-9d4d-4017-b219-86b9109b4474">
+        <InsertPoint x="0" y="0" z="0"/>
+        <Extrusion bottom="2.7" top="25.8">
+          <Loop>
+            <CheckPoint x="0" y="0"/>
+            <CheckPoint x="23" y="0"/>
+            <CheckPoint x="23" y="7"/>
+            <CheckPoint x="17.9" y="7"/>
+            <CheckPoint x="17.9" y="11.5"/>
+            <CheckPoint x="0" y="11.5"/>
+          </Loop>
+        </Extrusion>
+      </Building>
+    </Buildings>
+  </Site>
+</Document>
