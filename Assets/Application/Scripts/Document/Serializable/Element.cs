@@ -11,5 +11,5 @@ public class Element
     public string GUID { get; set; } = Guid.NewGuid().ToString();
 
     [XmlAttribute("style")]
-    public string Style;
+    public string Style { get; set; }
 }

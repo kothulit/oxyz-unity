@@ -5,16 +5,11 @@ using System.Xml.Serialization;
 [XmlRoot("Style")]
 public class Style
 {
-    [XmlAttribute("name")]
-    public string Name { get; set; } = "NewDocument";
+    [XmlAttribute("name")] public string Name { get; set; } 
+    [XmlAttribute("guid")] public string GUID { get; set; } 
+    [XmlAttribute("category")] public string Category { get; set; } = "None";
 
-    [XmlAttribute("guid")]
-    public string GUID { get; set; } = Guid.NewGuid().ToString();
-
-    [XmlAttribute("category")]
-    public string Category { get; set; } = "None";
-
-    [XmlArray("Parameters")]
-    [XmlArrayItem("Parameter")]
-    public List<Parameter> Parameters { get; set; } = new();
+    [XmlElement("Wall", typeof(WallElement))]
+    [XmlElement("Space", typeof(SpaceElement))]
+    public Element Definition { get; set; }
 }
