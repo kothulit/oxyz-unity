@@ -6,8 +6,8 @@ public class SpaceElement : Element
 {
     [XmlArray("DefaultStyles")]
     [XmlArrayItem("DefaultStyle")]
-    public List<DefaultStyle> Defaults = new();
+    public List<DefaultStyle> Defaults { get; set; } = new();
 
     [XmlElement("InsertPoint")]
-    public Point3D InsertPoint = new Point3D();
+    public Point3D InsertPoint { get; set; } = new Point3D();
 }
