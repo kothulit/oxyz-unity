@@ -15,11 +15,5 @@ public class AppStartup : IStartable
     public void Start()
     {
         Debug.Log("[AppStartup] VContainer start");
-
-        var project = _projectLoader.Load(@"C:\GitSourceTree\oxyz-unity\Assets\Examples\XMLTestProject");
-
-        Debug.Log($"Project loaded: {project.Document.Name}");
-        Debug.Log($"Styles: {project.StylesByName.Count}");
-        Debug.Log($"Materials: {project.MaterialsByName.Count}");
     }
 }
