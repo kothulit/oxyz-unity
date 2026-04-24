@@ -12,6 +12,8 @@ public class AppLifetimeScope : LifetimeScope
         // Пока регистрируем только точку входа
         builder.Register<AppStateController>(Lifetime.Singleton);
 
+        builder.Register<IProjectLoader, ProjectLoader>(Lifetime.Singleton);
+
         builder.RegisterComponent(_appStateFrameController);
 
         builder.RegisterEntryPoint<AppStartup>();
