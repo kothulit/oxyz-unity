@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Oxyz.Xml.Serializable;
 using static Unity.VectorGraphics.VectorUtils;
 
 public class ExtrusionBuildCommand : MonoBehaviour

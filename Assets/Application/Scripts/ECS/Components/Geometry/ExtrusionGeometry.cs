@@ -1,4 +1,4 @@
-
+using UnityEngine;
 
 namespace ECS
 {
@@ -6,6 +6,6 @@ namespace ECS
     {
         public float bottom;
         public float top;
-        public float[,] vertices;
+        public Vector2[] points;
     }
 }

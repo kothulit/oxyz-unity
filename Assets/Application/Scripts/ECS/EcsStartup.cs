@@ -1,5 +1,7 @@
+using ECS;
 using Leopotam.EcsLite;
 using UnityEngine;
+using VContainer;
 
 namespace Client
 {
@@ -7,12 +9,20 @@ namespace Client
     {
         EcsWorld _world;
         IEcsSystems _systems;
+        ProjectSession _projectSession;
+
+        [Inject]
+        public void Construct(ProjectSession projectSession)
+        {
+            _projectSession = projectSession;
+        }
 
         void Start ()
         {
             _world = new EcsWorld ();
-            _systems = new EcsSystems (_world);
+            _systems = new EcsSystems(_world, new EcsAppContext(_projectSession));
             _systems
+                .Add(new ImportElementsFromProjectSystem())
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())
                 // .Add (new TestSystem2 ())

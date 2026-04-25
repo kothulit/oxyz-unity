@@ -1,3 +1,4 @@
+using Client;
 using System;
 using UnityEngine;
 using VContainer;
@@ -16,6 +17,8 @@ public class AppLifetimeScope : LifetimeScope
 
         builder.RegisterComponent(_appStateFrameController);
         builder.RegisterComponent(_projectFolderPicker);
+
+        builder.RegisterComponentInHierarchy<EcsStartup>();
 
         builder.RegisterEntryPoint<AppStartup>();
     }
