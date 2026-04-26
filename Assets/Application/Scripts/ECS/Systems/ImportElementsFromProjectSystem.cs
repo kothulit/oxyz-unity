@@ -63,6 +63,7 @@ namespace ECS
                 ref ExtrusionGeometry extrusionGeometry = ref extrusionGeometryPool.Add(entity);
                 extrusionGeometry.bottom = extrusion.Bottom;
                 extrusionGeometry.top = extrusion.Top;
+                extrusionGeometry.points = new Vector2[extrusion.Loop.Length];
                 for (int j = 0; j < extrusion.Loop.Length; j++)
                 {
                     extrusionGeometry.points[j] = new Vector2(extrusion.Loop[j].X, extrusion.Loop[j].Y);

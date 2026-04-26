@@ -7,6 +7,7 @@ public class AppLifetimeScope : LifetimeScope
 {
     [SerializeField] private AppStateFrameController _appStateFrameController;
     [SerializeField] private ProjectFolderPicker _projectFolderPicker;
+    [SerializeField] private EcsStartup _ecsStartup;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -17,8 +18,7 @@ public class AppLifetimeScope : LifetimeScope
 
         builder.RegisterComponent(_appStateFrameController);
         builder.RegisterComponent(_projectFolderPicker);
-
-        builder.RegisterComponentInHierarchy<EcsStartup>();
+        builder.RegisterComponent(_ecsStartup);
 
         builder.RegisterEntryPoint<AppStartup>();
     }

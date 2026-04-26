@@ -283,6 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtrusionBuildCommand
   _sceneCamera: {fileID: 963194227}
+  _material: {fileID: 0}
   _generatedRoot: {fileID: 0}
   _bottomOffset: 0
   _topOffset: 3
@@ -561,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtrusionGeometrySpawner
   relativePath: Examples/space-001.xml
+  material: {fileID: 0}
 --- !u!4 &267947890
 Transform:
   m_ObjectHideFlags: 0
@@ -589,6 +591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineGeometrySpawner
   _relativePath: Examples/line-001.xml
+  _material: {fileID: 0}
 --- !u!1 &375200458
 GameObject:
   m_ObjectHideFlags: 0
@@ -2138,6 +2141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1095956585}
   - component: {fileID: 1095956587}
+  - component: {fileID: 1095956588}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -2178,6 +2182,19 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _appStateFrameController: {fileID: 1615169424}
   _projectFolderPicker: {fileID: 26114107}
+  _ecsStartup: {fileID: 1095956588}
+--- !u!114 &1095956588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095956584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f87efdc5f278a841b1763699245340e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Client.EcsStartup
 --- !u!1 &1103066712
 GameObject:
   m_ObjectHideFlags: 0

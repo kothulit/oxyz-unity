@@ -5,11 +5,12 @@ using VContainer;
 
 namespace Client
 {
-    sealed class EcsStartup : MonoBehaviour
+    public sealed class EcsStartup : MonoBehaviour
     {
-        EcsWorld _world;
-        IEcsSystems _systems;
-        ProjectSession _projectSession;
+        private EcsWorld _world;
+        private IEcsSystems _systems;
+        private bool _initialized;
+        private ProjectSession _projectSession;
 
         [Inject]
         public void Construct(ProjectSession projectSession)
@@ -17,9 +18,12 @@ namespace Client
             _projectSession = projectSession;
         }
 
-        void Start ()
+        public void Initialize()
         {
-            _world = new EcsWorld ();
+            if (_initialized)
+                return;
+
+            _world = new EcsWorld();
             _systems = new EcsSystems(_world, new EcsAppContext(_projectSession));
             _systems
                 .Add(new ImportElementsFromProjectSystem())
@@ -32,13 +36,19 @@ namespace Client
 #if UNITY_EDITOR
                 // add debug systems for custom worlds here, for example:
                 // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
-                .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ())
+                .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
-                .Init ();
+                .Init();
+
+            _initialized = true;
+            Debug.Log("[ECS] Initialized");
         }
 
         void Update ()
         {
+            if (!_initialized)
+                return;
+
             // process systems here.
             _systems?.Run ();
         }
