@@ -7,7 +7,7 @@
     <Buildings> 
       <Building name="Тестовый дом" guid="6cec33aa-9d4d-4017-b219-86b9109b4474">
         <InsertPoint x="0" y="0" z="0"/>
-        <Extrusion bottom="2.7" top="25.8">
+        <Extrusion bottom="-2.7" top="25.8">
           <Loop>
             <CheckPoint x="0" y="0"/>
             <CheckPoint x="23" y="0"/>
@@ -15,6 +15,19 @@
             <CheckPoint x="17.9" y="7"/>
             <CheckPoint x="17.9" y="11.5"/>
             <CheckPoint x="0" y="11.5"/>
+          </Loop>
+        </Extrusion>
+      </Building>
+      <Building name="Тестовый дом 2" guid="20e26a00-c1dc-4bd6-aaf3-2583dc2726aa">
+        <InsertPoint x="0" y="20" z="0"/>
+        <Extrusion bottom="-2.7" top="13.8">
+          <Loop>
+            <CheckPoint x="-5" y="-8"/>
+            <CheckPoint x="9" y="-8"/>
+            <CheckPoint x="9" y="-21"/>
+            <CheckPoint x="6" y="-21"/>
+            <CheckPoint x="6" y="-24"/>
+            <CheckPoint x="-5" y="-24"/>
           </Loop>
         </Extrusion>
       </Building>
