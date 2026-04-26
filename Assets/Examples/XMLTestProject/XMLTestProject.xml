@@ -3,7 +3,7 @@
     <DefaultStyle category="Space" style="Помещение" />
     <DefaultStyle category="Wall" style="Кирпичная кладка 250мм" />
   </DefaultStyles>
-  <Site>
+  <Site name="Площадка" guid="0d166ac1-9594-4646-887f-667122f60af9">
     <Buildings> 
       <Building name="Тестовый дом" guid="6cec33aa-9d4d-4017-b219-86b9109b4474">
         <InsertPoint x="0" y="0" z="0"/>

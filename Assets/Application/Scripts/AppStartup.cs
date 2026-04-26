@@ -7,18 +7,18 @@ public class AppStartup : IStartable
     private AppStateController _appStateController;
     private readonly IProjectLoader _projectLoader;
     private readonly ProjectSession _projectSession;
-    private readonly EcsRuntime _ecsStartup;
+    private readonly EcsRuntime _ecsRuntime;
 
     public AppStartup(
         AppStateController appStateController,
         IProjectLoader projectLoader,
         ProjectSession projectSession,
-        EcsRuntime ecsStartup)
+        EcsRuntime ecsRuntime)
     {
         _appStateController = appStateController;
         _projectLoader = projectLoader;
         _projectSession = projectSession;
-        _ecsStartup = ecsStartup;
+        _ecsRuntime = ecsRuntime;
     }
 
     public void Start()

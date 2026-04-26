@@ -1,8 +1,8 @@
 using ECS.Tag;
 using Leopotam.EcsLite;
 using Oxyz.Xml.Serializable;
-using System.Security.Principal;
 using UnityEngine;
+using static UnityEngine.Audio.ProcessorInstance.AvailableData;
 
 namespace ECS
 {
@@ -12,6 +12,7 @@ namespace ECS
         {
             EcsWorld world = systems.GetWorld();
             EcsAppContext context = systems.GetShared<EcsAppContext>();
+            int siteEntity = -1;
 
             Project project = context.Project;
 
@@ -29,10 +30,12 @@ namespace ECS
                 return;
             }
 
-            ImportBuilding(world, project);
+            siteEntity = ImportSite(world, project);
+
+            ImportBuilding(world, project, siteEntity);
         }
 
-        private void ImportBuilding(EcsWorld world, Project project)
+        private void ImportBuilding(EcsWorld world, Project project, int siteEntity)
         {
             if (project.Document?.Site?.Buildings == null)
             {
@@ -44,6 +47,7 @@ namespace ECS
             EcsPool<Element> elementPool = world.GetPool<Element>();
             EcsPool<ExtrusionGeometry> extrusionGeometryPool = world.GetPool<ExtrusionGeometry>();
             EcsPool<Geometry> geometryPool = world.GetPool<Geometry>();
+            EcsPool<HierarchyNode> hierarchyPool = world.GetPool<HierarchyNode>();
 
             SiteElement host = project.Document.Site;
 
@@ -73,8 +77,40 @@ namespace ECS
 
                 ref Geometry geometry = ref geometryPool.Add(entity);
 
+                ref HierarchyNode hierarchy = ref hierarchyPool.Add(entity);
+                hierarchy.ParentEntity = siteEntity;
+
                 Debug.Log($"[ECS] Building entity created: {element.name}");
             }
+        }
+
+        private int ImportSite(EcsWorld world, Project project)
+        {
+            if (project.Document?.Site == null)
+            {
+                Debug.LogWarning("[ECS] Project has no site.");
+                return -1;
+            }
+
+            EcsPool<SiteTag> siteTagPool = world.GetPool<SiteTag>();
+            EcsPool<Element> elementPool = world.GetPool<Element>();
+            EcsPool<HierarchyNode> hierarchyPool = world.GetPool<HierarchyNode>();
+
+            int siteEntity = world.NewEntity();
+
+            siteTagPool.Add(siteEntity);
+
+            ref Element siteElement = ref elementPool.Add(siteEntity);
+            siteElement.name = project.Document.Site.Name;
+            siteElement.guid = project.Document.Site.GUID;
+            siteElement.sourceIndex = 0;
+
+            ref HierarchyNode siteHierarchy = ref hierarchyPool.Add(siteEntity);
+            siteHierarchy.ParentEntity = -1;
+
+            Debug.Log($"[ECS] Site entity created: {siteElement.name}");
+
+            return siteEntity;
         }
     }
 }
