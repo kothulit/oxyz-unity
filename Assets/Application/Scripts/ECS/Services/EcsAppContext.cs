@@ -3,11 +3,11 @@ namespace ECS
 {
     public sealed class EcsAppContext
     {
-        public ProjectSession ProjectSession { get; }
+        public Project Project { get; }
 
-        public EcsAppContext(ProjectSession projectSession)
+        public EcsAppContext(Project project)
         {
-            ProjectSession = projectSession;
+            Project = project;
         }
     }
 }

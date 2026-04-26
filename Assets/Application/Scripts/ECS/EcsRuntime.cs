@@ -1,16 +1,17 @@
 using ECS;
 using Leopotam.EcsLite;
+using R3;
 using UnityEngine;
 using VContainer;
 
 namespace Client
 {
-    public sealed class EcsStartup : MonoBehaviour
+    public sealed class EcsRuntime : MonoBehaviour
     {
         private EcsWorld _world;
         private IEcsSystems _systems;
-        private bool _initialized;
         private ProjectSession _projectSession;
+        private System.IDisposable _projectSubscription;
 
         [Inject]
         public void Construct(ProjectSession projectSession)
@@ -18,13 +19,29 @@ namespace Client
             _projectSession = projectSession;
         }
 
-        public void Initialize()
+        private void Start()
         {
-            if (_initialized)
-                return;
+            _projectSubscription = _projectSession.CurrentProject
+                .Subscribe(OnProjectChanged);
+        }
 
+        private void OnProjectChanged(Project project)
+        {
+            DestroyEcsWorld();
+            Debug.Log("[ECS] Project cleared. ECS world destroyed.");
+
+            if (project == null)
+            {
+                return;
+            }
+
+            InitializeForProject(project);
+        }
+
+        private void InitializeForProject(Project project)
+        {
             _world = new EcsWorld();
-            _systems = new EcsSystems(_world, new EcsAppContext(_projectSession));
+            _systems = new EcsSystems(_world, new EcsAppContext(project));
             _systems
                 .Add(new ImportElementsFromProjectSystem())
                 // register your systems here, for example:
@@ -39,28 +56,32 @@ namespace Client
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
                 .Init();
-
-            _initialized = true;
-            Debug.Log("[ECS] Initialized");
+            Debug.Log($"[ECS] Initialized for project: {project.Document.Name}");
         }
 
         void Update ()
         {
-            if (!_initialized)
-                return;
-
             // process systems here.
             _systems?.Run ();
         }
 
+
+
         void OnDestroy ()
+        {
+            _projectSubscription?.Dispose();
+            _projectSubscription = null;
+            DestroyEcsWorld();
+        }
+
+        private void DestroyEcsWorld()
         {
             if (_systems != null)
             {
                 // list of custom worlds will be cleared
                 // during IEcsSystems.Destroy(). so, you
                 // need to save it here if you need.
-                _systems.Destroy ();
+                _systems.Destroy();
                 _systems = null;
             }
 
@@ -69,7 +90,7 @@ namespace Client
             // cleanup default world.
             if (_world != null)
             {
-                _world.Destroy ();
+                _world.Destroy();
                 _world = null;
             }
         }

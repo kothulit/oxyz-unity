@@ -13,13 +13,15 @@ namespace ECS
             EcsWorld world = systems.GetWorld();
             EcsAppContext context = systems.GetShared<EcsAppContext>();
 
-            Project project = context.ProjectSession.CurrentProject;
+            Project project = context.Project;
 
             if (project == null)
             {
-                Debug.LogWarning("[ECS] No project loaded. Buildings import skipped.");
+                Debug.LogWarning("[ECS] No project.");
                 return;
             }
+
+            Debug.Log($"[ECS] Import project: {project.Document.Name}");
 
             if (project.Document?.Site?.Buildings == null)
             {

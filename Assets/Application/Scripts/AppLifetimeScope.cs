@@ -7,7 +7,7 @@ public class AppLifetimeScope : LifetimeScope
 {
     [SerializeField] private AppStateFrameController _appStateFrameController;
     [SerializeField] private ProjectFolderPicker _projectFolderPicker;
-    [SerializeField] private EcsStartup _ecsStartup;
+    [SerializeField] private EcsRuntime _ecsStartup;
 
     protected override void Configure(IContainerBuilder builder)
     {
