@@ -1,13 +1,16 @@
 using System.Xml.Serialization;
 
-public class CheckPoint
+namespace Oxyz.Xml.Serializable
 {
-    [XmlAttribute("x")]
-    public float X { get; set; }
+    public class CheckPoint
+    {
+        [XmlAttribute("x")]
+        public float X { get; set; }
 
-    [XmlAttribute("y")]
-    public float Y { get; set; }
+        [XmlAttribute("y")]
+        public float Y { get; set; }
 
-    [XmlAttribute("style")]
-    public string Style { get; set; } = "";
+        [XmlAttribute("style")]
+        public string Style { get; set; } = "";
+    }
 }

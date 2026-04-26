@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Oxyz.Xml.Serializable;
-using static Unity.VectorGraphics.VectorUtils;
 
 public class ExtrusionBuildCommand : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class ExtrusionBuildCommand : MonoBehaviour
 
     [Header("Scene references")]
     [SerializeField] private Camera _sceneCamera;
-    [SerializeField] private Material _material;
+    [SerializeField] private UnityEngine.Material _material;
     [SerializeField] private Transform _generatedRoot;
 
     [Header("Extrusion settings")]

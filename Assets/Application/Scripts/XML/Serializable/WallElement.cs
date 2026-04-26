@@ -1,7 +1,10 @@
 using System.Xml.Serialization;
 
-[XmlRoot("Wall")]
-public class WallElement : Element
+namespace Oxyz.Xml.Serializable
 {
-    [XmlAttribute("material")] public string Material { get; set; } = "";
+    [XmlRoot("Wall")]
+    public class WallElement : Element
+    {
+        [XmlAttribute("material")] public string Material { get; set; } = "";
+    }
 }

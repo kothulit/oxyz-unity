@@ -1,10 +1,13 @@
 using System.Xml.Serialization;
 
-public class DefaultStyle
+namespace Oxyz.Xml.Serializable
 {
-    [XmlAttribute("category")]
-    public string Category { get; set; } = "";
+    public class DefaultStyle
+    {
+        [XmlAttribute("category")]
+        public string Category { get; set; } = "";
 
-    [XmlAttribute("style")]
-    public string Style { get; set; } = "";
+        [XmlAttribute("style")]
+        public string Style { get; set; } = "";
+    }
 }

@@ -1,15 +1,18 @@
 using System;
 using System.Xml.Serialization;
 
-[XmlRoot("Element")]
-public class Element
+namespace Oxyz.Xml.Serializable
 {
-    [XmlAttribute("name")]
-    public string Name { get; set; } = "NewElement";
+    [XmlRoot("Element")]
+    public class Element
+    {
+        [XmlAttribute("name")]
+        public string Name { get; set; } = "NewElement";
 
-    [XmlAttribute("guid")]
-    public string GUID { get; set; } = Guid.NewGuid().ToString();
+        [XmlAttribute("guid")]
+        public string GUID { get; set; } = Guid.NewGuid().ToString();
 
-    [XmlAttribute("style")]
-    public string Style { get; set; }
+        [XmlAttribute("style")]
+        public string Style { get; set; }
+    }
 }
