@@ -32,13 +32,13 @@ namespace Client
         private void OnProjectChanged(Project project)
         {
             DestroyEcsWorld();
-            Debug.Log("[ECS] Project cleared. ECS world destroyed.");
 
             if (project == null)
             {
                 return;
             }
 
+            Debug.Log("[ECS] Project changed. Rebuilding ECS world.");
             InitializeForProject(project);
         }
 
@@ -82,6 +82,8 @@ namespace Client
             _projectSubscription?.Dispose();
             _projectSubscription = null;
             DestroyEcsWorld();
+
+
         }
 
         private void DestroyEcsWorld()
@@ -102,7 +104,28 @@ namespace Client
             {
                 _world.Destroy();
                 _world = null;
+                Debug.Log("[ECS] Project cleared. ECS world destroyed.");
             }
+
+            ClearViewRoot();
+            ClearHierarchyPanel();
+        }
+
+        private void ClearViewRoot()
+        {
+            if (_viewRoot == null)
+                return;
+            for (int i = _viewRoot.childCount - 1; i >= 0; i--)
+            {
+                Transform child = _viewRoot.GetChild(i);
+                Destroy(child.gameObject);
+            }
+        }
+
+        private void ClearHierarchyPanel()
+        {
+            if (_entityHierarchyPanel != null)
+                _entityHierarchyPanel.Clear();
         }
     }
 }
