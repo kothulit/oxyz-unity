@@ -1,22 +1,25 @@
+using R3;
 using System;
 
-public sealed class ProjectSession
+public sealed class ProjectSession : IDisposable
 {
-    public Project CurrentProject { get; private set; }
+    public ReactiveProperty<Project> CurrentProject { get; private set; } = new(null);
 
-    public bool HasProject => CurrentProject != null;
-
-    public event Action<Project> ProjectChanged;
+    public bool HasProject => CurrentProject.Value != null;
 
     public void SetCurrentProject(Project project)
     {
-        CurrentProject = project ?? throw new ArgumentNullException(nameof(project));
-        ProjectChanged?.Invoke(CurrentProject);
+        CurrentProject.OnNext(project ?? throw new ArgumentNullException(nameof(project)));
     }
 
     public void Clear()
     {
-        CurrentProject = null;
-        ProjectChanged?.Invoke(null);
+        CurrentProject.OnNext(null);
+
+    }
+
+    public void Dispose()
+    {
+        CurrentProject.Dispose();
     }
 }

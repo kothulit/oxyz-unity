@@ -1,4 +1,4 @@
-using System;
+using Client;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -6,6 +6,7 @@ public class AppLifetimeScope : LifetimeScope
 {
     [SerializeField] private AppStateFrameController _appStateFrameController;
     [SerializeField] private ProjectFolderPicker _projectFolderPicker;
+    [SerializeField] private EcsRuntime _ecsRuntime;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -16,6 +17,7 @@ public class AppLifetimeScope : LifetimeScope
 
         builder.RegisterComponent(_appStateFrameController);
         builder.RegisterComponent(_projectFolderPicker);
+        builder.RegisterComponent(_ecsRuntime);
 
         builder.RegisterEntryPoint<AppStartup>();
     }

@@ -1,5 +1,7 @@
 using System.IO;
 using System.Xml.Serialization;
+using Oxyz.Xml.Serializable;
+
 public static class ExtrusionGeometryXmlLoader
 {
     public static ExtrusionGeometry LoadFromFile(string path)

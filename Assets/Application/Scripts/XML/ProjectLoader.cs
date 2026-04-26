@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Oxyz.Xml.Serializable;
+
 public sealed class ProjectLoader : IProjectLoader
 {
     public Project Load(string projectRootPath)
