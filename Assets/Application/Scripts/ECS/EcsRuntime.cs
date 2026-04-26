@@ -9,6 +9,8 @@ namespace Client
     public sealed class EcsRuntime : MonoBehaviour
     {
         [SerializeField] private EcsEntityHierarchyPanel _entityHierarchyPanel;
+        [SerializeField] private Transform _viewRoot;
+        [SerializeField] private Material _defaultMaterial;
 
         private EcsWorld _world;
         private IEcsSystems _systems;
@@ -43,10 +45,15 @@ namespace Client
         private void InitializeForProject(Project project)
         {
             _world = new EcsWorld();
-            _systems = new EcsSystems(_world, new EcsAppContext(project, _entityHierarchyPanel));
+            _systems = new EcsSystems(_world, new EcsAppContext(
+                project, 
+                _entityHierarchyPanel,
+                _viewRoot,
+                _defaultMaterial));
             _systems
                 .Add(new ImportElementsFromProjectSystem())
                 .Add(new BuildEntityHierarchyUiSystem())
+                .Add(new CreateBuildingViewsSystem())
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())
                 // .Add (new TestSystem2 ())
