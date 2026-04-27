@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Разделение пространств.md",
+                "file": "XML представление модели/Сущности XML.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Разделение пространств"
+              "title": "Сущности XML"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Разделение пространств.md",
+                "file": "XML представление модели/Сущности XML.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Обратные ссылки для Разделение пространств"
+              "title": "Обратные ссылки для Сущности XML"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Разделение пространств.md",
+                "file": "XML представление модели/Сущности XML.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Исходящие ссылки из Разделение пространств"
+              "title": "Исходящие ссылки из Сущности XML"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Разделение пространств.md",
+                "file": "XML представление модели/Сущности XML.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура Разделение пространств"
+              "title": "Структура Сущности XML"
             }
           }
         ]
@@ -185,8 +185,11 @@
   },
   "active": "17f21a7158eb23a5",
   "lastOpenFiles": [
-    "Основные принципы.md",
+    "XML представление модели/_resources/Сущности XML",
+    "XML представление модели/_resources",
     "Разделение пространств.md",
+    "XML представление модели/Сущности XML.md",
+    "Основные принципы.md",
     "Oxyz Game Design Document.md",
     "Space.md",
     "Основные принципы.md.meta",
