@@ -1,0 +1,201 @@
+{
+  "main": {
+    "id": "f6467a1955298e5c",
+    "type": "split",
+    "children": [
+      {
+        "id": "232e92ee57f021f2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "17f21a7158eb23a5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Oxyz Game Design Document.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Oxyz Game Design Document"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1e3482c721557b5b",
+    "type": "split",
+    "children": [
+      {
+        "id": "aaaa4155f8b429e3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f3b35fdcb38529f1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "56288ae4391ff8b7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "a7c1c1b175987fce",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "232cd50457c5fa9d",
+    "type": "split",
+    "children": [
+      {
+        "id": "82cd2b5972a3090e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e8db12bb8a9c913a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Oxyz Game Design Document.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для Oxyz Game Design Document"
+            }
+          },
+          {
+            "id": "1d596c3581a3810b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Oxyz Game Design Document.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из Oxyz Game Design Document"
+            }
+          },
+          {
+            "id": "196a69825c8f996f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "1694bf53a16df60d",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Все свойства"
+            }
+          },
+          {
+            "id": "b9e08e8adabc7ff6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Oxyz Game Design Document.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура Oxyz Game Design Document"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false
+    }
+  },
+  "active": "17f21a7158eb23a5",
+  "lastOpenFiles": [
+    "Основные принципы.md",
+    "Space.md",
+    "Oxyz Game Design Document.md",
+    "Oxyz Game Design Document.md.meta",
+    "XML представление модели.meta",
+    "XML представление модели/XML представление.md.meta",
+    "XML представление модели/XML представление.md",
+    "XML.md",
+    "XML представление модели",
+    "XML представление модели",
+    "Space.md.meta",
+    "Добро пожаловать.md"
+  ]
+}
