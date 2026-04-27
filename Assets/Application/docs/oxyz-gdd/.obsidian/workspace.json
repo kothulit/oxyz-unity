@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Oxyz Game Design Document.md",
+                "file": "Разделение пространств.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Oxyz Game Design Document"
+              "title": "Разделение пространств"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Oxyz Game Design Document.md",
+                "file": "Разделение пространств.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Обратные ссылки для Oxyz Game Design Document"
+              "title": "Обратные ссылки для Разделение пространств"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Oxyz Game Design Document.md",
+                "file": "Разделение пространств.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Исходящие ссылки из Oxyz Game Design Document"
+              "title": "Исходящие ссылки из Разделение пространств"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Oxyz Game Design Document.md",
+                "file": "Разделение пространств.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура Oxyz Game Design Document"
+              "title": "Структура Разделение пространств"
             }
           }
         ]
@@ -186,8 +186,10 @@
   "active": "17f21a7158eb23a5",
   "lastOpenFiles": [
     "Основные принципы.md",
-    "Space.md",
+    "Разделение пространств.md",
     "Oxyz Game Design Document.md",
+    "Space.md",
+    "Основные принципы.md.meta",
     "Oxyz Game Design Document.md.meta",
     "XML представление модели.meta",
     "XML представление модели/XML представление.md.meta",
