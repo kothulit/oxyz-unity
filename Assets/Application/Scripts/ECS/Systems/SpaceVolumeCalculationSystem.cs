@@ -25,6 +25,7 @@ namespace ECS
             EcsPool<SpacePlacement> placementPool = world.GetPool<SpacePlacement>();
             EcsPool<SpatialDivision> divisionPool = world.GetPool<SpatialDivision>();
             EcsPool<SpatialVolume> volumePool = world.GetPool<SpatialVolume>();
+            EcsPool<SpatialVolumeSet> volumeSetPool = world.GetPool<SpatialVolumeSet>();
             EcsPool<Geometry> geometryPool = world.GetPool<Geometry>();
 
             foreach (int entity in filter)
@@ -32,14 +33,14 @@ namespace ECS
                 ref Element element = ref elementPool.Get(entity);
                 ref HierarchyNode hierarchy = ref hierarchyPool.Get(entity);
 
-                if (hierarchy.ParentEntity < 0 || !volumePool.Has(hierarchy.ParentEntity))
+                if (hierarchy.ParentEntity < 0 || !volumeSetPool.Has(hierarchy.ParentEntity))
                 {
                     Debug.LogWarning($"[ECS] Space skipped. Parent volume is not available: {element.name}");
                     continue;
                 }
 
-                ref SpatialVolume parentVolume = ref volumePool.Get(hierarchy.ParentEntity);
-                if (!IsValidVolume(parentVolume))
+                ref SpatialVolumeSet parentVolumeSet = ref volumeSetPool.Get(hierarchy.ParentEntity);
+                if (!IsValidVolumeSet(parentVolumeSet))
                 {
                     Debug.LogWarning($"[ECS] Space skipped. Parent volume is invalid: {element.name}");
                     continue;
@@ -49,16 +50,24 @@ namespace ECS
                 float insertZ = placement.insertPoint.z;
                 float[] splitElevations = GetParentDividingPlaneElevations(hierarchy.ParentEntity, divisionPool);
 
-                if (!TryResolveVerticalRange(parentVolume, splitElevations, insertZ, out float bottom, out float top))
+                if (!TryResolveVerticalRange(parentVolumeSet, splitElevations, insertZ, out float bottom, out float top))
                 {
                     Debug.LogWarning($"[ECS] Space skipped. InsertPoint.z is outside parent volume: {element.name}");
                     continue;
                 }
 
+                SpatialVolume[] clippedParts = ClipVolumeSet(parentVolumeSet, bottom, top);
+                if (clippedParts.Length == 0)
+                {
+                    Debug.LogWarning($"[ECS] Space skipped. No parent volume parts intersect range: {element.name}");
+                    continue;
+                }
+
+                ref SpatialVolumeSet volumeSet = ref AddOrGetVolumeSet(entity, volumeSetPool);
+                volumeSet.parts = clippedParts;
+
                 ref SpatialVolume volume = ref AddOrGetVolume(entity, volumePool);
-                volume.bottom = bottom;
-                volume.top = top;
-                volume.points = CopyPoints(parentVolume.points);
+                volume = clippedParts[0];
 
                 if (!geometryPool.Has(entity))
                     geometryPool.Add(entity);
@@ -70,6 +79,20 @@ namespace ECS
             return volume.points != null
                    && volume.points.Length >= 3
                    && volume.top > volume.bottom;
+        }
+
+        private static bool IsValidVolumeSet(SpatialVolumeSet volumeSet)
+        {
+            if (volumeSet.parts == null || volumeSet.parts.Length == 0)
+                return false;
+
+            for (int i = 0; i < volumeSet.parts.Length; i++)
+            {
+                if (IsValidVolume(volumeSet.parts[i]))
+                    return true;
+            }
+
+            return false;
         }
 
         private static float[] GetParentDividingPlaneElevations(
@@ -84,13 +107,14 @@ namespace ECS
         }
 
         private static bool TryResolveVerticalRange(
-            SpatialVolume parentVolume,
+            SpatialVolumeSet parentVolumeSet,
             float[] splitElevations,
             float insertZ,
             out float bottom,
             out float top)
         {
-            List<float> elevations = BuildElevationSequence(parentVolume, splitElevations);
+            GetVerticalBounds(parentVolumeSet, out float parentBottom, out float parentTop);
+            List<float> elevations = BuildElevationSequence(parentBottom, parentTop, splitElevations);
 
             for (int i = 0; i < elevations.Count - 1; i++)
             {
@@ -112,22 +136,22 @@ namespace ECS
             return false;
         }
 
-        private static List<float> BuildElevationSequence(SpatialVolume parentVolume, float[] splitElevations)
+        private static List<float> BuildElevationSequence(float parentBottom, float parentTop, float[] splitElevations)
         {
-            var elevations = new List<float> { parentVolume.bottom };
+            var elevations = new List<float> { parentBottom };
 
             for (int i = 0; i < splitElevations.Length; i++)
             {
                 float elevation = splitElevations[i];
-                if (elevation <= parentVolume.bottom + ElevationEpsilon)
+                if (elevation <= parentBottom + ElevationEpsilon)
                     continue;
-                if (elevation >= parentVolume.top - ElevationEpsilon)
+                if (elevation >= parentTop - ElevationEpsilon)
                     continue;
 
                 elevations.Add(elevation);
             }
 
-            elevations.Add(parentVolume.top);
+            elevations.Add(parentTop);
             elevations.Sort();
 
             for (int i = elevations.Count - 2; i >= 0; i--)
@@ -139,12 +163,62 @@ namespace ECS
             return elevations;
         }
 
+        private static void GetVerticalBounds(SpatialVolumeSet volumeSet, out float bottom, out float top)
+        {
+            bottom = float.PositiveInfinity;
+            top = float.NegativeInfinity;
+
+            for (int i = 0; i < volumeSet.parts.Length; i++)
+            {
+                SpatialVolume part = volumeSet.parts[i];
+                if (!IsValidVolume(part))
+                    continue;
+
+                bottom = Mathf.Min(bottom, part.bottom);
+                top = Mathf.Max(top, part.top);
+            }
+        }
+
+        private static SpatialVolume[] ClipVolumeSet(SpatialVolumeSet parentVolumeSet, float bottom, float top)
+        {
+            var clippedParts = new List<SpatialVolume>();
+
+            for (int i = 0; i < parentVolumeSet.parts.Length; i++)
+            {
+                SpatialVolume part = parentVolumeSet.parts[i];
+                if (!IsValidVolume(part))
+                    continue;
+
+                float clippedBottom = Mathf.Max(part.bottom, bottom);
+                float clippedTop = Mathf.Min(part.top, top);
+                if (clippedTop - clippedBottom <= ElevationEpsilon)
+                    continue;
+
+                clippedParts.Add(new SpatialVolume
+                {
+                    bottom = clippedBottom,
+                    top = clippedTop,
+                    points = CopyPoints(part.points)
+                });
+            }
+
+            return clippedParts.ToArray();
+        }
+
         private static ref SpatialVolume AddOrGetVolume(int entity, EcsPool<SpatialVolume> volumePool)
         {
             if (volumePool.Has(entity))
                 return ref volumePool.Get(entity);
 
             return ref volumePool.Add(entity);
+        }
+
+        private static ref SpatialVolumeSet AddOrGetVolumeSet(int entity, EcsPool<SpatialVolumeSet> volumeSetPool)
+        {
+            if (volumeSetPool.Has(entity))
+                return ref volumeSetPool.Get(entity);
+
+            return ref volumeSetPool.Add(entity);
         }
 
         private static Vector2[] CopyPoints(Vector2[] source)

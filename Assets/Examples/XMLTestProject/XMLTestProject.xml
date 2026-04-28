@@ -17,6 +17,14 @@
               <CheckPoint x="0" y="11.5"/>
             </Loop>
           </Extrusion>
+          <Extrusion bottom="23" top="25.8">
+            <Loop>
+              <CheckPoint x="17.9" y="4.5"/>
+              <CheckPoint x="23" y="4.5"/>
+              <CheckPoint x="23" y="7"/>
+              <CheckPoint x="17.9" y="7"/>
+            </Loop>
+          </Extrusion>
         </Geometry>
         <DividingPlanes>
           <DividingPlane x="1" y="1" z="3.3"/>
@@ -25,6 +33,7 @@
           <DividingPlane x="1" y="1" z="13.2"/>
           <DividingPlane x="1" y="1" z="16.5"/>
           <DividingPlane x="1" y="1" z="19.8"/>
+          <DividingPlane x="1" y="1" z="23.1"/>
         </DividingPlanes>
         <Spaces>
           <Space name="Подвал" guid="72c96998-58d9-4b2d-8f63-1d2475cf6f84" x="2" y="2" z="-2"/>
@@ -35,6 +44,7 @@
           <Space name="Этаж 5" guid="a1920024-0798-4fbe-abad-19997e5284d8" x="2" y="2" z="13.2"/>
           <Space name="Этаж 6" guid="0c70897a-7e16-4c7e-b847-9235698419ec" x="2" y="2" z="16.5"/>
           <Space name="Этаж 7" guid="03400a81-9059-4c2d-8e3a-9f8276ff2119" x="2" y="2" z="19.8"/>
+          <Space name="Кровля" guid="82747184-43ab-4ce6-ab65-3050f26a813e" x="18.9" y="5.5" z="23.1"/>
         </Spaces>
       </Building>
     </Buildings>

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ECS.Tag;
 using Leopotam.EcsLite;
 using Oxyz.Xml.Serializable;
@@ -46,6 +47,7 @@ namespace ECS
             EcsPool<SpaceTag> spaceTagPool = world.GetPool<SpaceTag>();
             EcsPool<Element> elementPool = world.GetPool<Element>();
             EcsPool<SpatialVolume> volumePool = world.GetPool<SpatialVolume>();
+            EcsPool<SpatialVolumeSet> volumeSetPool = world.GetPool<SpatialVolumeSet>();
             EcsPool<SpatialContainer> containerPool = world.GetPool<SpatialContainer>();
             EcsPool<SpatialDivision> divisionPool = world.GetPool<SpatialDivision>();
             EcsPool<SpacePlacement> placementPool = world.GetPool<SpacePlacement>();
@@ -57,9 +59,9 @@ namespace ECS
             for (int i = 0; i < project.Document.Site.Buildings.Count; i++)
             {
                 BuildingElement building = project.Document.Site.Buildings[i];
-                Oxyz.Xml.Serializable.ExtrusionGeometry extrusion = GetPrimaryExtrusion(building);
+                SpatialVolume[] volumes = GetValidVolumes(building);
 
-                if (extrusion?.Loop == null || extrusion.Loop.Length < 3 || extrusion.Top <= extrusion.Bottom)
+                if (volumes.Length == 0)
                 {
                     Debug.LogWarning($"[ECS] Building skipped. Invalid spatial definition: {building.Name}");
                     continue;
@@ -76,10 +78,11 @@ namespace ECS
                 element.guid = building.GUID;
                 element.hostName = host.Name;
 
+                ref SpatialVolumeSet volumeSet = ref volumeSetPool.Add(entity);
+                volumeSet.parts = volumes;
+
                 ref SpatialVolume volume = ref volumePool.Add(entity);
-                volume.bottom = extrusion.Bottom;
-                volume.top = extrusion.Top;
-                volume.points = ToVector2Array(extrusion.Loop);
+                volume = volumes[0];
 
                 ref HierarchyNode hierarchy = ref hierarchyPool.Add(entity);
                 hierarchy.ParentEntity = siteEntity;
@@ -110,7 +113,7 @@ namespace ECS
 
         private static void ImportSpaces(
             EcsWorld world,
-            System.Collections.Generic.List<SpaceElement> spaces,
+            List<SpaceElement> spaces,
             int parentEntity,
             string hostName,
             EcsPool<SpaceTag> spaceTagPool,
@@ -168,12 +171,31 @@ namespace ECS
             }
         }
 
-        private static Oxyz.Xml.Serializable.ExtrusionGeometry GetPrimaryExtrusion(BuildingElement building)
+        private static SpatialVolume[] GetValidVolumes(BuildingElement building)
         {
             if (building.Geometry?.Extrusions == null || building.Geometry.Extrusions.Count == 0)
-                return null;
+                return System.Array.Empty<SpatialVolume>();
 
-            return building.Geometry.Extrusions[0];
+            var volumes = new List<SpatialVolume>();
+
+            for (int i = 0; i < building.Geometry.Extrusions.Count; i++)
+            {
+                Oxyz.Xml.Serializable.ExtrusionGeometry extrusion = building.Geometry.Extrusions[i];
+                if (extrusion?.Loop == null || extrusion.Loop.Length < 3 || extrusion.Top <= extrusion.Bottom)
+                {
+                    Debug.LogWarning($"[ECS] Building extrusion skipped. Invalid extrusion #{i + 1}: {building.Name}");
+                    continue;
+                }
+
+                volumes.Add(new SpatialVolume
+                {
+                    bottom = extrusion.Bottom,
+                    top = extrusion.Top,
+                    points = ToVector2Array(extrusion.Loop)
+                });
+            }
+
+            return volumes.ToArray();
         }
 
         private static Vector2[] ToVector2Array(CheckPoint[] points)
@@ -195,7 +217,7 @@ namespace ECS
             return new Vector3(point.X, point.Y, point.Z);
         }
 
-        private static float[] GetDividingPlaneElevations(System.Collections.Generic.List<DividingPlane> dividingPlanes)
+        private static float[] GetDividingPlaneElevations(List<DividingPlane> dividingPlanes)
         {
             if (dividingPlanes == null || dividingPlanes.Count == 0)
                 return System.Array.Empty<float>();
