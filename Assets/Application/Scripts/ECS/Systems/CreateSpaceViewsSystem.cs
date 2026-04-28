@@ -14,24 +14,23 @@ namespace ECS
             EcsFilter filter = world
                 .Filter<SpaceTag>()
                 .Inc<Element>()
-                .Inc<SpatialVolume>()
+                .Inc<SpatialVolumeSet>()
                 .Inc<Geometry>()
                 .End();
 
             EcsPool<Element> elementPool = world.GetPool<Element>();
-            EcsPool<SpatialVolume> volumePool = world.GetPool<SpatialVolume>();
+            EcsPool<SpatialVolumeSet> volumeSetPool = world.GetPool<SpatialVolumeSet>();
             EcsPool<Geometry> geometryPool = world.GetPool<Geometry>();
 
             foreach (int entity in filter)
             {
                 ref Element element = ref elementPool.Get(entity);
-                ref SpatialVolume volume = ref volumePool.Get(entity);
+                ref SpatialVolumeSet volumeSet = ref volumeSetPool.Get(entity);
                 ref Geometry geometry = ref geometryPool.Get(entity);
 
-                Mesh mesh = EcsExtrusionMeshBuilder.Build(volume);
-                if (mesh == null)
+                if (volumeSet.parts == null || volumeSet.parts.Length == 0)
                 {
-                    Debug.LogError($"Failed to build space mesh for: {element.name}");
+                    Debug.LogError($"Failed to build space mesh. Volume set is empty: {element.name}");
                     continue;
                 }
 
@@ -39,14 +38,31 @@ namespace ECS
                 if (context.ViewRoot != null)
                     go.transform.SetParent(context.ViewRoot, false);
 
-                var meshFilter = go.AddComponent<MeshFilter>();
-                var meshRenderer = go.AddComponent<MeshRenderer>();
                 Material material = CreateSpaceMaterial(context.DefaultMaterial, entity);
 
-                meshFilter.sharedMesh = mesh;
-                meshRenderer.sharedMaterial = material;
+                Mesh firstMesh = null;
+                for (int i = 0; i < volumeSet.parts.Length; i++)
+                {
+                    Mesh mesh = EcsExtrusionMeshBuilder.Build(volumeSet.parts[i]);
+                    if (mesh == null)
+                    {
+                        Debug.LogError($"Failed to build space mesh part {i + 1} for: {element.name}");
+                        continue;
+                    }
 
-                geometry.mesh = mesh;
+                    if (firstMesh == null)
+                        firstMesh = mesh;
+
+                    var partGo = new GameObject($"{element.name} Part {i + 1}");
+                    partGo.transform.SetParent(go.transform, false);
+
+                    var meshFilter = partGo.AddComponent<MeshFilter>();
+                    var meshRenderer = partGo.AddComponent<MeshRenderer>();
+                    meshFilter.sharedMesh = mesh;
+                    meshRenderer.sharedMaterial = material;
+                }
+
+                geometry.mesh = firstMesh;
                 geometry.material = material;
                 geometry.transform = go.transform;
 

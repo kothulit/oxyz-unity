@@ -1,0 +1,49 @@
+<Document name="CourtyardHouseProject" guid="fce04b13-0534-4d17-996b-4ce0c177f10a">
+  <DefaultStyles>
+    <DefaultStyle category="Space" style="Помещение" />
+    <DefaultStyle category="Wall" style="Кирпичная кладка 250мм" />
+  </DefaultStyles>
+  <Site name="Дворовый участок" guid="82d45438-ff34-4747-9e18-20319f0fbd96">
+    <Buildings>
+      <Building name="Дом с внутренним двором" guid="5f5e7353-0997-4c7f-a4fc-0466d067d1d9" x="0" y="0" z="0">
+        <Geometry>
+          <Extrusion bottom="-3" top="24">
+            <Loop>
+              <CheckPoint x="0" y="0"/>
+              <CheckPoint x="36" y="0"/>
+              <CheckPoint x="36" y="9"/>
+              <CheckPoint x="25" y="9"/>
+              <CheckPoint x="25" y="22"/>
+              <CheckPoint x="36" y="22"/>
+              <CheckPoint x="36" y="31"/>
+              <CheckPoint x="0" y="31"/>
+              <CheckPoint x="0" y="22"/>
+              <CheckPoint x="11" y="22"/>
+              <CheckPoint x="11" y="9"/>
+              <CheckPoint x="0" y="9"/>
+            </Loop>
+          </Extrusion>
+        </Geometry>
+        <DividingPlanes>
+          <DividingPlane x="2" y="2" z="0"/>
+          <DividingPlane x="2" y="2" z="4.2"/>
+          <DividingPlane x="2" y="2" z="7.5"/>
+          <DividingPlane x="2" y="2" z="10.8"/>
+          <DividingPlane x="2" y="2" z="14.1"/>
+          <DividingPlane x="2" y="2" z="17.4"/>
+          <DividingPlane x="2" y="2" z="20.7"/>
+        </DividingPlanes>
+        <Spaces>
+          <Space name="Подземный паркинг" guid="6cb02f31-84d7-4f67-8173-81d9f62a31fb" x="4" y="4" z="-2"/>
+          <Space name="Общественный первый уровень" guid="5d31323c-a1bb-4a6b-8bbd-763a27f1b36b" x="4" y="4" z="1.2"/>
+          <Space name="Жилой этаж 2" guid="626ca3d1-d54f-4708-bdce-c527372f8a55" x="4" y="4" z="5.4"/>
+          <Space name="Жилой этаж 3" guid="b404dbe3-4169-40cf-869b-96358704cc00" x="4" y="4" z="8.7"/>
+          <Space name="Жилой этаж 4" guid="0ef025e5-29ed-46f1-b44e-c476a573f624" x="4" y="4" z="12"/>
+          <Space name="Жилой этаж 5" guid="6cd29bbd-9401-45ea-8428-f7e22b390c8f" x="4" y="4" z="15.3"/>
+          <Space name="Жилой этаж 6" guid="5dcc8da4-22b2-4888-ac7d-deb65e0ac9ea" x="4" y="4" z="18.6"/>
+          <Space name="Технический этаж" guid="ef83182d-0df8-4fd8-bc23-f0c89966d76b" x="4" y="4" z="22"/>
+        </Spaces>
+      </Building>
+    </Buildings>
+  </Site>
+</Document>
