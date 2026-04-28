@@ -25,15 +25,22 @@ namespace ECS
 
             List<Vector2> points = NormalizeWinding(new List<Vector2>(geometry.points));
             List<List<Vector2>> holes = NormalizeHoles(geometry.holes);
-            List<Vector2> facePoints = BuildFaceContour(points, holes);
 
             var vertices = new List<Vector3>();
             var triangles = new List<int>();
 
-            List<int> faceTriangles = TriangulateEarClipping(facePoints);
+            if (holes.Count > 0)
+            {
+                AddGridCapFace(vertices, triangles, points, holes, geometry.bottom, isTop: false);
+                AddGridCapFace(vertices, triangles, points, holes, geometry.top, isTop: true);
+            }
+            else
+            {
+                List<int> faceTriangles = TriangulateEarClipping(points);
+                AddBottomFace(vertices, triangles, faceTriangles, points, geometry.bottom);
+                AddTopFace(vertices, triangles, faceTriangles, points, geometry.top);
+            }
 
-            AddBottomFace(vertices, triangles, faceTriangles, facePoints, geometry.bottom);
-            AddTopFace(vertices, triangles, faceTriangles, facePoints, geometry.top);
             AddSideFaces(vertices, triangles, points, geometry.bottom, geometry.top, reverseWinding: false);
             for (int i = 0; i < holes.Count; i++)
             {
@@ -63,6 +70,105 @@ namespace ECS
                 triangles.Add(start + faceTriangles[i + 1]);
                 triangles.Add(start + faceTriangles[i + 2]);
             }
+        }
+
+        private static void AddGridCapFace(
+            List<Vector3> vertices,
+            List<int> triangles,
+            List<Vector2> outer,
+            List<List<Vector2>> holes,
+            float z,
+            bool isTop)
+        {
+            List<float> xs = CollectSortedCoordinates(outer, holes, useX: true);
+            List<float> ys = CollectSortedCoordinates(outer, holes, useX: false);
+
+            for (int xIndex = 0; xIndex < xs.Count - 1; xIndex++)
+            {
+                for (int yIndex = 0; yIndex < ys.Count - 1; yIndex++)
+                {
+                    float x0 = xs[xIndex];
+                    float x1 = xs[xIndex + 1];
+                    float y0 = ys[yIndex];
+                    float y1 = ys[yIndex + 1];
+
+                    if (Mathf.Abs(x1 - x0) <= Mathf.Epsilon || Mathf.Abs(y1 - y0) <= Mathf.Epsilon)
+                        continue;
+
+                    var center = new Vector2((x0 + x1) * 0.5f, (y0 + y1) * 0.5f);
+                    if (!IsPointInsidePolygon(center, outer))
+                        continue;
+                    if (IsInsideAnyHole(center, holes))
+                        continue;
+
+                    int start = vertices.Count;
+                    vertices.Add(ToUnityPoint(new Vector2(x0, y0), z));
+                    vertices.Add(ToUnityPoint(new Vector2(x1, y0), z));
+                    vertices.Add(ToUnityPoint(new Vector2(x1, y1), z));
+                    vertices.Add(ToUnityPoint(new Vector2(x0, y1), z));
+
+                    if (isTop)
+                    {
+                        triangles.Add(start + 0);
+                        triangles.Add(start + 2);
+                        triangles.Add(start + 1);
+
+                        triangles.Add(start + 0);
+                        triangles.Add(start + 3);
+                        triangles.Add(start + 2);
+                    }
+                    else
+                    {
+                        triangles.Add(start + 0);
+                        triangles.Add(start + 1);
+                        triangles.Add(start + 2);
+
+                        triangles.Add(start + 0);
+                        triangles.Add(start + 2);
+                        triangles.Add(start + 3);
+                    }
+                }
+            }
+        }
+
+        private static List<float> CollectSortedCoordinates(List<Vector2> outer, List<List<Vector2>> holes, bool useX)
+        {
+            var coordinates = new List<float>();
+            AddCoordinates(coordinates, outer, useX);
+
+            for (int i = 0; i < holes.Count; i++)
+            {
+                AddCoordinates(coordinates, holes[i], useX);
+            }
+
+            coordinates.Sort();
+
+            for (int i = coordinates.Count - 2; i >= 0; i--)
+            {
+                if (Mathf.Abs(coordinates[i + 1] - coordinates[i]) <= 0.0001f)
+                    coordinates.RemoveAt(i + 1);
+            }
+
+            return coordinates;
+        }
+
+        private static void AddCoordinates(List<float> coordinates, List<Vector2> points, bool useX)
+        {
+            for (int i = 0; i < points.Count; i++)
+            {
+                coordinates.Add(useX ? points[i].x : points[i].y);
+            }
+        }
+
+        private static bool IsInsideAnyHole(Vector2 point, List<List<Vector2>> holes)
+        {
+            for (int i = 0; i < holes.Count; i++)
+            {
+                if (IsPointInsidePolygon(point, holes[i]))
+                    return true;
+            }
+
+            return false;
         }
 
         private static void AddTopFace(List<Vector3> vertices, List<int> triangles, List<int> faceTriangles, List<Vector2> points, float z)
@@ -342,6 +448,23 @@ namespace ECS
             bool hasNegative = area1 < 0f || area2 < 0f || area3 < 0f;
             bool hasPositive = area1 > 0f || area2 > 0f || area3 > 0f;
             return !(hasNegative && hasPositive);
+        }
+
+        private static bool IsPointInsidePolygon(Vector2 point, List<Vector2> polygon)
+        {
+            bool inside = false;
+            for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
+            {
+                Vector2 a = polygon[i];
+                Vector2 b = polygon[j];
+
+                bool intersects = (a.y > point.y) != (b.y > point.y)
+                                  && point.x < (b.x - a.x) * (point.y - a.y) / (b.y - a.y) + a.x;
+                if (intersects)
+                    inside = !inside;
+            }
+
+            return inside;
         }
 
         private static float Cross(Vector2 a, Vector2 b)

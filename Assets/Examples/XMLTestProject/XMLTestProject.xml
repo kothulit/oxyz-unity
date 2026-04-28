@@ -27,6 +27,7 @@
           </Extrusion>
         </Geometry>
         <DividingPlanes>
+          <DividingPlane x="1" y="1" z="0"/>
           <DividingPlane x="1" y="1" z="3.3"/>
           <DividingPlane x="1" y="1" z="6.6"/>
           <DividingPlane x="1" y="1" z="9.9"/>
@@ -41,6 +42,12 @@
               <CheckPoint x="5.475" y="4.135"/>
               <CheckPoint x="5.475" y="4.375"/>
               <CheckPoint x="4.575" y="4.375"/>
+          </DividingBoundary>
+          <DividingBoundary shape="Loop">
+              <CheckPoint x="11.325" y="4.135"/>
+              <CheckPoint x="12.265" y="4.135"/>
+              <CheckPoint x="12.265" y="4.375"/>
+              <CheckPoint x="11.325" y="4.375"/>
           </DividingBoundary>
         </DividingBoundaries>
         <Spaces>
