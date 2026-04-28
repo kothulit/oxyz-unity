@@ -7,7 +7,7 @@
     <Buildings>
       <Building name="Тестовый дом" guid="6cec33aa-9d4d-4017-b219-86b9109b4474" x="0" y="0" z="0">
         <Geometry>
-          <Extrusion bottom="0" top="6">
+          <Extrusion bottom="-2.7" top="23.1">
             <Loop>
               <CheckPoint x="0" y="0"/>
               <CheckPoint x="23" y="0"/>
@@ -19,11 +19,22 @@
           </Extrusion>
         </Geometry>
         <DividingPlanes>
-          <DividingPlane x="1" y="1" z="3"/>
+          <DividingPlane x="1" y="1" z="3.3"/>
+          <DividingPlane x="1" y="1" z="6.6"/>
+          <DividingPlane x="1" y="1" z="9.9"/>
+          <DividingPlane x="1" y="1" z="13.2"/>
+          <DividingPlane x="1" y="1" z="16.5"/>
+          <DividingPlane x="1" y="1" z="19.8"/>
         </DividingPlanes>
         <Spaces>
-          <Space name="Нижнее пространство" guid="a041aa8e-51e8-4d37-8f06-627c81a9a52e" x="2" y="2" z="1"/>
-          <Space name="Верхнее пространство" guid="72c96998-58d9-4b2d-8f63-1d2475cf6f84" x="2" y="2" z="4"/>
+          <Space name="Подвал" guid="72c96998-58d9-4b2d-8f63-1d2475cf6f84" x="2" y="2" z="-2"/>
+          <Space name="Этаж 1" guid="a041aa8e-51e8-4d37-8f06-627c81a9a52e" x="2" y="2" z="1"/>
+          <Space name="Этаж 2" guid="24c63739-9596-4e47-ba3f-0b8aa8021396" x="2" y="2" z="4.3"/>
+          <Space name="Этаж 3" guid="1858feb6-3d9a-41d9-bb21-b383a2f4dbd4" x="2" y="2" z="6.6"/>
+          <Space name="Этаж 4" guid="13feecf7-3ccc-4446-978c-6d07d38923b7" x="2" y="2" z="9.9"/>
+          <Space name="Этаж 5" guid="a1920024-0798-4fbe-abad-19997e5284d8" x="2" y="2" z="13.2"/>
+          <Space name="Этаж 6" guid="0c70897a-7e16-4c7e-b847-9235698419ec" x="2" y="2" z="16.5"/>
+          <Space name="Этаж 7" guid="03400a81-9059-4c2d-8e3a-9f8276ff2119" x="2" y="2" z="19.8"/>
         </Spaces>
       </Building>
     </Buildings>
