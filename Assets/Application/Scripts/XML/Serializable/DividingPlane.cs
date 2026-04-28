@@ -3,13 +3,8 @@ using System.Xml.Serialization;
 
 namespace Oxyz.Xml.Serializable
 {
-    [XmlRoot("Space")]
-    public class SpaceElement : Element
+    public class DividingPlane
     {
-        [XmlArray("DefaultStyles")]
-        [XmlArrayItem("DefaultStyle")]
-        public List<DefaultStyle> Defaults { get; set; } = new();
-
         [XmlAttribute("x")]
         public float InsertX { get; set; }
 
@@ -31,16 +26,8 @@ namespace Oxyz.Xml.Serializable
             }
         }
 
-        [XmlArray("DividingPlanes")]
-        [XmlArrayItem("DividingPlane")]
-        public List<DividingPlane> DividingPlanes { get; set; } = new();
-
-        [XmlArray("DividingBoundaries")]
-        [XmlArrayItem("DividingBoundary")]
-        public List<DividingBoundary> DividingBoundaries { get; set; } = new();
-
-        [XmlArray("Spaces")]
-        [XmlArrayItem("Space")]
-        public List<SpaceElement> Spaces { get; set; } = new();
+        [XmlArray("Regions")]
+        [XmlArrayItem("Region")]
+        public List<DividingRegion> Regions { get; set; } = new();
     }
 }

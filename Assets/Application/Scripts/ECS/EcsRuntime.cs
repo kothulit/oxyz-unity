@@ -52,8 +52,10 @@ namespace Client
                 _defaultMaterial));
             _systems
                 .Add(new ImportElementsFromProjectSystem())
+                .Add(new SpaceVolumeCalculationSystem())
                 .Add(new BuildEntityHierarchyUiSystem())
                 .Add(new CreateBuildingViewsSystem())
+                .Add(new CreateSpaceViewsSystem())
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())
                 // .Add (new TestSystem2 ())
