@@ -37,7 +37,7 @@ namespace ECS
             AddSideFaces(vertices, triangles, points, geometry.bottom, geometry.top, reverseWinding: false);
             for (int i = 0; i < holes.Count; i++)
             {
-                AddSideFaces(vertices, triangles, holes[i], geometry.bottom, geometry.top, reverseWinding: true);
+                AddSideFaces(vertices, triangles, holes[i], geometry.bottom, geometry.top, reverseWinding: false);
             }
 
             var mesh = new Mesh();

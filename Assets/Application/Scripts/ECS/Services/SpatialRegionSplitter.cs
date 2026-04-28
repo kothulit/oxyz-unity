@@ -100,6 +100,9 @@ namespace ECS
             if (TryCreateOutsideRegionBySharedEdge(region.points, loop, point, out SpatialPlanRegion outsideRegion))
                 return new[] { outsideRegion };
 
+            if (!IsPolygonInsideRegion(region.points, loop))
+                return new[] { CopyRegion(region) };
+
             return new[]
             {
                 new SpatialPlanRegion
@@ -108,6 +111,17 @@ namespace ECS
                     holes = AppendHole(region.holes, loop)
                 }
             };
+        }
+
+        private static bool IsPolygonInsideRegion(Vector2[] region, Vector2[] polygon)
+        {
+            for (int i = 0; i < polygon.Length; i++)
+            {
+                if (!ContainsPoint(region, polygon[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         private static bool TryCreateOutsideRegionBySharedEdge(
