@@ -57,10 +57,9 @@ namespace ECS
             for (int i = 0; i < project.Document.Site.Buildings.Count; i++)
             {
                 BuildingElement building = project.Document.Site.Buildings[i];
-                CheckPoint[] borderLoop = GetBuildingLoop(building);
-                Volume volumeDefinition = GetBuildingVolume(building);
+                Oxyz.Xml.Serializable.ExtrusionGeometry extrusion = GetPrimaryExtrusion(building);
 
-                if (borderLoop == null || borderLoop.Length < 3 || volumeDefinition == null || volumeDefinition.Top <= volumeDefinition.Bottom)
+                if (extrusion?.Loop == null || extrusion.Loop.Length < 3 || extrusion.Top <= extrusion.Bottom)
                 {
                     Debug.LogWarning($"[ECS] Building skipped. Invalid spatial definition: {building.Name}");
                     continue;
@@ -78,9 +77,9 @@ namespace ECS
                 element.hostName = host.Name;
 
                 ref SpatialVolume volume = ref volumePool.Add(entity);
-                volume.bottom = volumeDefinition.Bottom;
-                volume.top = volumeDefinition.Top;
-                volume.points = ToVector2Array(borderLoop);
+                volume.bottom = extrusion.Bottom;
+                volume.top = extrusion.Top;
+                volume.points = ToVector2Array(extrusion.Loop);
 
                 ref HierarchyNode hierarchy = ref hierarchyPool.Add(entity);
                 hierarchy.ParentEntity = siteEntity;
@@ -169,27 +168,12 @@ namespace ECS
             }
         }
 
-        private static CheckPoint[] GetBuildingLoop(BuildingElement building)
+        private static Oxyz.Xml.Serializable.ExtrusionGeometry GetPrimaryExtrusion(BuildingElement building)
         {
-            if (building.Border?.Loop != null && building.Border.Loop.Length >= 3)
-                return building.Border.Loop;
-
-            return building.Extrusion?.Loop;
-        }
-
-        private static Volume GetBuildingVolume(BuildingElement building)
-        {
-            if (building.Volume != null && building.Volume.Top > building.Volume.Bottom)
-                return building.Volume;
-
-            if (building.Extrusion == null)
+            if (building.Geometry?.Extrusions == null || building.Geometry.Extrusions.Count == 0)
                 return null;
 
-            return new Volume
-            {
-                Bottom = building.Extrusion.Bottom,
-                Top = building.Extrusion.Top
-            };
+            return building.Geometry.Extrusions[0];
         }
 
         private static Vector2[] ToVector2Array(CheckPoint[] points)
@@ -219,7 +203,7 @@ namespace ECS
             float[] elevations = new float[dividingPlanes.Count];
             for (int i = 0; i < dividingPlanes.Count; i++)
             {
-                elevations[i] = dividingPlanes[i].Elevation;
+                elevations[i] = dividingPlanes[i].InsertPoint.Z;
             }
 
             return elevations;

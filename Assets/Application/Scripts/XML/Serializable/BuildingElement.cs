@@ -10,17 +10,29 @@ namespace Oxyz.Xml.Serializable
         [XmlArrayItem("DefaultStyle")]
         public List<DefaultStyle> Defaults { get; set; } = new();
 
-        [XmlElement("InsertPoint")]
-        public Point3D InsertPoint { get; set; } = new Point3D();
+        [XmlAttribute("x")]
+        public float InsertX { get; set; }
 
-        [XmlElement("Volume")]
-        public Volume Volume { get; set; } = new Volume();
+        [XmlAttribute("y")]
+        public float InsertY { get; set; }
 
-        [XmlElement("Border")]
-        public Border Border { get; set; } = new Border();
+        [XmlAttribute("z")]
+        public float InsertZ { get; set; }
 
-        [XmlElement("Extrusion")]
-        public ExtrusionGeometry Extrusion { get; set; }
+        [XmlIgnore]
+        public Point3D InsertPoint
+        {
+            get => new Point3D { X = InsertX, Y = InsertY, Z = InsertZ };
+            set
+            {
+                InsertX = value?.X ?? 0f;
+                InsertY = value?.Y ?? 0f;
+                InsertZ = value?.Z ?? 0f;
+            }
+        }
+
+        [XmlElement("Geometry")]
+        public GeometryDefinition Geometry { get; set; } = new();
 
         [XmlArray("DividingPlanes")]
         [XmlArrayItem("DividingPlane")]
