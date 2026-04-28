@@ -24,6 +24,7 @@ namespace ECS
             EcsPool<HierarchyNode> hierarchyPool = world.GetPool<HierarchyNode>();
             EcsPool<SpacePlacement> placementPool = world.GetPool<SpacePlacement>();
             EcsPool<SpatialDivision> divisionPool = world.GetPool<SpatialDivision>();
+            EcsPool<SpatialBoundarySet> boundarySetPool = world.GetPool<SpatialBoundarySet>();
             EcsPool<SpatialVolume> volumePool = world.GetPool<SpatialVolume>();
             EcsPool<SpatialVolumeSet> volumeSetPool = world.GetPool<SpatialVolumeSet>();
             EcsPool<Geometry> geometryPool = world.GetPool<Geometry>();
@@ -47,8 +48,10 @@ namespace ECS
                 }
 
                 ref SpacePlacement placement = ref placementPool.Get(entity);
+                Vector2 insertPlanPoint = new Vector2(placement.insertPoint.x, placement.insertPoint.y);
                 float insertZ = placement.insertPoint.z;
                 float[] splitElevations = GetParentDividingPlaneElevations(hierarchy.ParentEntity, divisionPool);
+                SpatialBoundary[] boundaries = GetParentDividingBoundaries(hierarchy.ParentEntity, boundarySetPool);
 
                 if (!TryResolveVerticalRange(parentVolumeSet, splitElevations, insertZ, out float bottom, out float top))
                 {
@@ -56,10 +59,10 @@ namespace ECS
                     continue;
                 }
 
-                SpatialVolume[] clippedParts = ClipVolumeSet(parentVolumeSet, bottom, top);
+                SpatialVolume[] clippedParts = ClipVolumeSet(parentVolumeSet, boundaries, insertPlanPoint, bottom, top);
                 if (clippedParts.Length == 0)
                 {
-                    Debug.LogWarning($"[ECS] Space skipped. No parent volume parts intersect range: {element.name}");
+                    Debug.LogWarning($"[ECS] Space skipped. No parent volume parts match plan region and height range: {element.name}");
                     continue;
                 }
 
@@ -104,6 +107,17 @@ namespace ECS
 
             ref SpatialDivision division = ref divisionPool.Get(parentEntity);
             return division.dividingPlaneElevations ?? System.Array.Empty<float>();
+        }
+
+        private static SpatialBoundary[] GetParentDividingBoundaries(
+            int parentEntity,
+            EcsPool<SpatialBoundarySet> boundarySetPool)
+        {
+            if (!boundarySetPool.Has(parentEntity))
+                return System.Array.Empty<SpatialBoundary>();
+
+            ref SpatialBoundarySet boundarySet = ref boundarySetPool.Get(parentEntity);
+            return boundarySet.boundaries ?? System.Array.Empty<SpatialBoundary>();
         }
 
         private static bool TryResolveVerticalRange(
@@ -179,7 +193,12 @@ namespace ECS
             }
         }
 
-        private static SpatialVolume[] ClipVolumeSet(SpatialVolumeSet parentVolumeSet, float bottom, float top)
+        private static SpatialVolume[] ClipVolumeSet(
+            SpatialVolumeSet parentVolumeSet,
+            SpatialBoundary[] boundaries,
+            Vector2 insertPlanPoint,
+            float bottom,
+            float top)
         {
             var clippedParts = new List<SpatialVolume>();
 
@@ -194,15 +213,38 @@ namespace ECS
                 if (clippedTop - clippedBottom <= ElevationEpsilon)
                     continue;
 
-                clippedParts.Add(new SpatialVolume
+                SpatialPlanRegion[] selectedRegions = SelectPlanRegions(part, boundaries, insertPlanPoint);
+                for (int j = 0; j < selectedRegions.Length; j++)
                 {
-                    bottom = clippedBottom,
-                    top = clippedTop,
-                    points = CopyPoints(part.points)
-                });
+                    clippedParts.Add(new SpatialVolume
+                    {
+                        bottom = clippedBottom,
+                        top = clippedTop,
+                        points = CopyPoints(selectedRegions[j].points)
+                    });
+                }
             }
 
             return clippedParts.ToArray();
+        }
+
+        private static SpatialPlanRegion[] SelectPlanRegions(
+            SpatialVolume parentPart,
+            SpatialBoundary[] boundaries,
+            Vector2 insertPlanPoint)
+        {
+            var initialRegion = new SpatialPlanRegion
+            {
+                points = parentPart.points
+            };
+
+            if (boundaries == null || boundaries.Length == 0)
+                return new[] { initialRegion };
+
+            if (!SpatialRegionSplitter.ContainsPoint(parentPart.points, insertPlanPoint))
+                return System.Array.Empty<SpatialPlanRegion>();
+
+            return SpatialRegionSplitter.SelectRegionsContainingPoint(initialRegion, boundaries, insertPlanPoint);
         }
 
         private static ref SpatialVolume AddOrGetVolume(int entity, EcsPool<SpatialVolume> volumePool)

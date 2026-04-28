@@ -50,6 +50,7 @@ namespace ECS
             EcsPool<SpatialVolumeSet> volumeSetPool = world.GetPool<SpatialVolumeSet>();
             EcsPool<SpatialContainer> containerPool = world.GetPool<SpatialContainer>();
             EcsPool<SpatialDivision> divisionPool = world.GetPool<SpatialDivision>();
+            EcsPool<SpatialBoundarySet> boundarySetPool = world.GetPool<SpatialBoundarySet>();
             EcsPool<SpacePlacement> placementPool = world.GetPool<SpacePlacement>();
             EcsPool<SpatialDefinitionSource> sourcePool = world.GetPool<SpatialDefinitionSource>();
             EcsPool<HierarchyNode> hierarchyPool = world.GetPool<HierarchyNode>();
@@ -90,6 +91,9 @@ namespace ECS
                 ref SpatialDivision division = ref divisionPool.Add(entity);
                 division.dividingPlaneElevations = GetDividingPlaneElevations(building.DividingPlanes);
 
+                ref SpatialBoundarySet boundarySet = ref boundarySetPool.Add(entity);
+                boundarySet.boundaries = GetDividingBoundaries(building.DividingBoundaries, building.Name);
+
                 ref SpatialDefinitionSource source = ref sourcePool.Add(entity);
                 source.sourceIndex = i;
                 source.sourceType = "Building";
@@ -105,6 +109,7 @@ namespace ECS
                     elementPool,
                     containerPool,
                     divisionPool,
+                    boundarySetPool,
                     placementPool,
                     sourcePool,
                     hierarchyPool);
@@ -120,6 +125,7 @@ namespace ECS
             EcsPool<Element> elementPool,
             EcsPool<SpatialContainer> containerPool,
             EcsPool<SpatialDivision> divisionPool,
+            EcsPool<SpatialBoundarySet> boundarySetPool,
             EcsPool<SpacePlacement> placementPool,
             EcsPool<SpatialDefinitionSource> sourcePool,
             EcsPool<HierarchyNode> hierarchyPool)
@@ -147,6 +153,9 @@ namespace ECS
                 ref SpatialDivision division = ref divisionPool.Add(entity);
                 division.dividingPlaneElevations = GetDividingPlaneElevations(space.DividingPlanes);
 
+                ref SpatialBoundarySet boundarySet = ref boundarySetPool.Add(entity);
+                boundarySet.boundaries = GetDividingBoundaries(space.DividingBoundaries, space.Name);
+
                 ref SpatialDefinitionSource source = ref sourcePool.Add(entity);
                 source.sourceIndex = i;
                 source.sourceType = "Space";
@@ -165,6 +174,7 @@ namespace ECS
                     elementPool,
                     containerPool,
                     divisionPool,
+                    boundarySetPool,
                     placementPool,
                     sourcePool,
                     hierarchyPool);
@@ -229,6 +239,52 @@ namespace ECS
             }
 
             return elevations;
+        }
+
+        private static SpatialBoundary[] GetDividingBoundaries(List<DividingBoundary> dividingBoundaries, string ownerName)
+        {
+            if (dividingBoundaries == null || dividingBoundaries.Count == 0)
+                return System.Array.Empty<SpatialBoundary>();
+
+            var boundaries = new List<SpatialBoundary>();
+
+            for (int i = 0; i < dividingBoundaries.Count; i++)
+            {
+                DividingBoundary boundary = dividingBoundaries[i];
+                CheckPoint[] points = boundary.Points;
+
+                if (!TryParseBoundaryShape(boundary.Shape, out SpatialBoundaryShape shape))
+                {
+                    Debug.LogWarning($"[ECS] DividingBoundary skipped. Unknown shape '{boundary.Shape}' in {ownerName}.");
+                    continue;
+                }
+
+                int minimumPointCount = shape == SpatialBoundaryShape.Loop ? 3 : 2;
+                if (points == null || points.Length < minimumPointCount)
+                {
+                    Debug.LogWarning($"[ECS] DividingBoundary skipped. Not enough points for {shape} in {ownerName}.");
+                    continue;
+                }
+
+                boundaries.Add(new SpatialBoundary
+                {
+                    shape = shape,
+                    points = ToVector2Array(points)
+                });
+            }
+
+            return boundaries.ToArray();
+        }
+
+        private static bool TryParseBoundaryShape(string value, out SpatialBoundaryShape shape)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                shape = SpatialBoundaryShape.Piece;
+                return true;
+            }
+
+            return System.Enum.TryParse(value, ignoreCase: true, out shape);
         }
 
         private int ImportSite(EcsWorld world, Project project)
