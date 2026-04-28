@@ -68,7 +68,30 @@ namespace ECS
             if (material.HasProperty("_Color"))
                 material.SetColor("_Color", color);
 
+            ConfigureOpaqueMaterial(material);
+
             return material;
+        }
+
+        private static void ConfigureOpaqueMaterial(Material material)
+        {
+            material.SetOverrideTag("RenderType", "Opaque");
+            material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.DisableKeyword("_ALPHABLEND_ON");
+            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+
+            if (material.HasProperty("_Mode"))
+                material.SetFloat("_Mode", 0f);
+            if (material.HasProperty("_Surface"))
+                material.SetFloat("_Surface", 0f);
+            if (material.HasProperty("_SrcBlend"))
+                material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.One);
+            if (material.HasProperty("_DstBlend"))
+                material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.Zero);
+            if (material.HasProperty("_ZWrite"))
+                material.SetFloat("_ZWrite", 1f);
         }
     }
 }
