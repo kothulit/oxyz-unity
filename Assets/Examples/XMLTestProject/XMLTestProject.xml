@@ -4,10 +4,11 @@
     <DefaultStyle category="Wall" style="Кирпичная кладка 250мм" />
   </DefaultStyles>
   <Site name="Площадка" guid="0d166ac1-9594-4646-887f-667122f60af9">
-    <Buildings> 
+    <Buildings>
       <Building name="Тестовый дом" guid="6cec33aa-9d4d-4017-b219-86b9109b4474">
         <InsertPoint x="0" y="0" z="0"/>
-        <Extrusion bottom="-2.7" top="25.8">
+        <Volume bottom="0" top="6"/>
+        <Border>
           <Loop>
             <CheckPoint x="0" y="0"/>
             <CheckPoint x="23" y="0"/>
@@ -16,20 +17,20 @@
             <CheckPoint x="17.9" y="11.5"/>
             <CheckPoint x="0" y="11.5"/>
           </Loop>
-        </Extrusion>
-      </Building>
-      <Building name="Тестовый дом 2" guid="20e26a00-c1dc-4bd6-aaf3-2583dc2726aa">
-        <InsertPoint x="0" y="20" z="0"/>
-        <Extrusion bottom="-2.7" top="13.8">
-          <Loop>
-            <CheckPoint x="-5" y="-8"/>
-            <CheckPoint x="9" y="-8"/>
-            <CheckPoint x="9" y="-21"/>
-            <CheckPoint x="6" y="-21"/>
-            <CheckPoint x="6" y="-24"/>
-            <CheckPoint x="-5" y="-24"/>
-          </Loop>
-        </Extrusion>
+        </Border>
+        <DividingPlanes>
+          <DividingPlane elevation="3">
+            <InsertPoint x="1" y="1" z="3"/>
+          </DividingPlane>
+        </DividingPlanes>
+        <Spaces>
+          <Space name="Нижнее пространство" guid="a041aa8e-51e8-4d37-8f06-627c81a9a52e">
+            <InsertPoint x="2" y="2" z="1"/>
+          </Space>
+          <Space name="Верхнее пространство" guid="72c96998-58d9-4b2d-8f63-1d2475cf6f84">
+            <InsertPoint x="2" y="2" z="4"/>
+          </Space>
+        </Spaces>
       </Building>
     </Buildings>
   </Site>

@@ -10,6 +10,19 @@ namespace ECS
             if (geometry.points == null || geometry.points.Length < 3)
                 return null;
 
+            return Build(new SpatialVolume
+            {
+                bottom = geometry.bottom,
+                top = geometry.top,
+                points = geometry.points
+            });
+        }
+
+        public static Mesh Build(SpatialVolume geometry)
+        {
+            if (geometry.points == null || geometry.points.Length < 3)
+                return null;
+
             List<Vector2> points = NormalizeWinding(new List<Vector2>(geometry.points));
 
             var vertices = new List<Vector3>();
@@ -17,7 +30,7 @@ namespace ECS
 
             List<int> faceTriangles = TriangulateEarClipping(points);
 
-            AddBottomFace(vertices, triangles,faceTriangles, points, geometry.bottom);
+            AddBottomFace(vertices, triangles, faceTriangles, points, geometry.bottom);
             AddTopFace(vertices, triangles, faceTriangles, points, geometry.top);
             AddSideFaces(vertices, triangles, points, geometry.bottom, geometry.top);
 
@@ -31,12 +44,12 @@ namespace ECS
             return mesh;
         }
 
-        private static void AddBottomFace(List<Vector3> vertices, List<int> triangles, List<int> faceTriangles, List<Vector2> points, float y)
+        private static void AddBottomFace(List<Vector3> vertices, List<int> triangles, List<int> faceTriangles, List<Vector2> points, float z)
         {
             int start = vertices.Count;
 
             foreach (var p in points)
-                vertices.Add(new Vector3(p.x, y, p.y));
+                vertices.Add(ToUnityPoint(p, z));
 
             for (int i = 0; i < faceTriangles.Count; i += 3)
             {
@@ -46,12 +59,12 @@ namespace ECS
             }
         }
 
-        private static void AddTopFace(List<Vector3> vertices, List<int> triangles, List<int> faceTriangles, List<Vector2> points, float y)
+        private static void AddTopFace(List<Vector3> vertices, List<int> triangles, List<int> faceTriangles, List<Vector2> points, float z)
         {
             int start = vertices.Count;
 
             foreach (var p in points)
-                vertices.Add(new Vector3(p.x, y, p.y));
+                vertices.Add(ToUnityPoint(p, z));
 
             for (int i = 0; i < faceTriangles.Count; i += 3)
             {
@@ -72,10 +85,10 @@ namespace ECS
 
                 int start = vertices.Count;
 
-                vertices.Add(new Vector3(p0.x, bottom, p0.y));
-                vertices.Add(new Vector3(p1.x, bottom, p1.y));
-                vertices.Add(new Vector3(p1.x, top, p1.y));
-                vertices.Add(new Vector3(p0.x, top, p0.y));
+                vertices.Add(ToUnityPoint(p0, bottom));
+                vertices.Add(ToUnityPoint(p1, bottom));
+                vertices.Add(ToUnityPoint(p1, top));
+                vertices.Add(ToUnityPoint(p0, top));
 
                 triangles.Add(start + 0);
                 triangles.Add(start + 2);
@@ -85,6 +98,11 @@ namespace ECS
                 triangles.Add(start + 3);
                 triangles.Add(start + 2);
             }
+        }
+
+        private static Vector3 ToUnityPoint(Vector2 planPoint, float z)
+        {
+            return new Vector3(planPoint.x, z, planPoint.y);
         }
 
         private static List<int> TriangulateEarClipping(List<Vector2> points)

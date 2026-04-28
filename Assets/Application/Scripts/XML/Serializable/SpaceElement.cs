@@ -12,5 +12,17 @@ namespace Oxyz.Xml.Serializable
 
         [XmlElement("InsertPoint")]
         public Point3D InsertPoint { get; set; } = new Point3D();
+
+        [XmlArray("DividingPlanes")]
+        [XmlArrayItem("DividingPlane")]
+        public List<DividingPlane> DividingPlanes { get; set; } = new();
+
+        [XmlArray("DividingBoundaries")]
+        [XmlArrayItem("DividingBoundary")]
+        public List<DividingBoundary> DividingBoundaries { get; set; } = new();
+
+        [XmlArray("Spaces")]
+        [XmlArrayItem("Space")]
+        public List<SpaceElement> Spaces { get; set; } = new();
     }
 }

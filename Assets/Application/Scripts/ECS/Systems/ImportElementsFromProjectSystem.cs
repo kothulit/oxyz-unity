@@ -2,7 +2,6 @@ using ECS.Tag;
 using Leopotam.EcsLite;
 using Oxyz.Xml.Serializable;
 using UnityEngine;
-using static UnityEngine.Audio.ProcessorInstance.AvailableData;
 
 namespace ECS
 {
@@ -44,9 +43,13 @@ namespace ECS
             }
 
             EcsPool<BuildingTag> buildingTagPool = world.GetPool<BuildingTag>();
+            EcsPool<SpaceTag> spaceTagPool = world.GetPool<SpaceTag>();
             EcsPool<Element> elementPool = world.GetPool<Element>();
-            EcsPool<ExtrusionGeometry> extrusionGeometryPool = world.GetPool<ExtrusionGeometry>();
-            EcsPool<Geometry> geometryPool = world.GetPool<Geometry>();
+            EcsPool<SpatialVolume> volumePool = world.GetPool<SpatialVolume>();
+            EcsPool<SpatialContainer> containerPool = world.GetPool<SpatialContainer>();
+            EcsPool<SpatialDivision> divisionPool = world.GetPool<SpatialDivision>();
+            EcsPool<SpacePlacement> placementPool = world.GetPool<SpacePlacement>();
+            EcsPool<SpatialDefinitionSource> sourcePool = world.GetPool<SpatialDefinitionSource>();
             EcsPool<HierarchyNode> hierarchyPool = world.GetPool<HierarchyNode>();
 
             SiteElement host = project.Document.Site;
@@ -54,11 +57,19 @@ namespace ECS
             for (int i = 0; i < project.Document.Site.Buildings.Count; i++)
             {
                 BuildingElement building = project.Document.Site.Buildings[i];
-                Oxyz.Xml.Serializable.ExtrusionGeometry extrusion = building.Extrusion;
+                CheckPoint[] borderLoop = GetBuildingLoop(building);
+                Volume volumeDefinition = GetBuildingVolume(building);
+
+                if (borderLoop == null || borderLoop.Length < 3 || volumeDefinition == null || volumeDefinition.Top <= volumeDefinition.Bottom)
+                {
+                    Debug.LogWarning($"[ECS] Building skipped. Invalid spatial definition: {building.Name}");
+                    continue;
+                }
 
                 int entity = world.NewEntity();
 
                 buildingTagPool.Add(entity);
+                containerPool.Add(entity);
 
                 ref Element element = ref elementPool.Add(entity);
                 element.name = building.Name;
@@ -66,22 +77,152 @@ namespace ECS
                 element.guid = building.GUID;
                 element.hostName = host.Name;
 
-                ref ExtrusionGeometry extrusionGeometry = ref extrusionGeometryPool.Add(entity);
-                extrusionGeometry.bottom = extrusion.Bottom;
-                extrusionGeometry.top = extrusion.Top;
-                extrusionGeometry.points = new Vector2[extrusion.Loop.Length];
-                for (int j = 0; j < extrusion.Loop.Length; j++)
-                {
-                    extrusionGeometry.points[j] = new Vector2(extrusion.Loop[j].X, extrusion.Loop[j].Y);
-                }
-
-                ref Geometry geometry = ref geometryPool.Add(entity);
+                ref SpatialVolume volume = ref volumePool.Add(entity);
+                volume.bottom = volumeDefinition.Bottom;
+                volume.top = volumeDefinition.Top;
+                volume.points = ToVector2Array(borderLoop);
 
                 ref HierarchyNode hierarchy = ref hierarchyPool.Add(entity);
                 hierarchy.ParentEntity = siteEntity;
 
+                ref SpatialDivision division = ref divisionPool.Add(entity);
+                division.dividingPlaneElevations = GetDividingPlaneElevations(building.DividingPlanes);
+
+                ref SpatialDefinitionSource source = ref sourcePool.Add(entity);
+                source.sourceIndex = i;
+                source.sourceType = "Building";
+
                 Debug.Log($"[ECS] Building entity created: {element.name}");
+
+                ImportSpaces(
+                    world,
+                    building.Spaces,
+                    entity,
+                    element.name,
+                    spaceTagPool,
+                    elementPool,
+                    containerPool,
+                    divisionPool,
+                    placementPool,
+                    sourcePool,
+                    hierarchyPool);
             }
+        }
+
+        private static void ImportSpaces(
+            EcsWorld world,
+            System.Collections.Generic.List<SpaceElement> spaces,
+            int parentEntity,
+            string hostName,
+            EcsPool<SpaceTag> spaceTagPool,
+            EcsPool<Element> elementPool,
+            EcsPool<SpatialContainer> containerPool,
+            EcsPool<SpatialDivision> divisionPool,
+            EcsPool<SpacePlacement> placementPool,
+            EcsPool<SpatialDefinitionSource> sourcePool,
+            EcsPool<HierarchyNode> hierarchyPool)
+        {
+            if (spaces == null)
+                return;
+
+            for (int i = 0; i < spaces.Count; i++)
+            {
+                SpaceElement space = spaces[i];
+                int entity = world.NewEntity();
+
+                spaceTagPool.Add(entity);
+                containerPool.Add(entity);
+
+                ref Element element = ref elementPool.Add(entity);
+                element.name = space.Name;
+                element.sourceIndex = i;
+                element.guid = space.GUID;
+                element.hostName = hostName;
+
+                ref SpacePlacement placement = ref placementPool.Add(entity);
+                placement.insertPoint = ToVector3(space.InsertPoint);
+
+                ref SpatialDivision division = ref divisionPool.Add(entity);
+                division.dividingPlaneElevations = GetDividingPlaneElevations(space.DividingPlanes);
+
+                ref SpatialDefinitionSource source = ref sourcePool.Add(entity);
+                source.sourceIndex = i;
+                source.sourceType = "Space";
+
+                ref HierarchyNode hierarchy = ref hierarchyPool.Add(entity);
+                hierarchy.ParentEntity = parentEntity;
+
+                Debug.Log($"[ECS] Space entity created: {element.name}");
+
+                ImportSpaces(
+                    world,
+                    space.Spaces,
+                    entity,
+                    element.name,
+                    spaceTagPool,
+                    elementPool,
+                    containerPool,
+                    divisionPool,
+                    placementPool,
+                    sourcePool,
+                    hierarchyPool);
+            }
+        }
+
+        private static CheckPoint[] GetBuildingLoop(BuildingElement building)
+        {
+            if (building.Border?.Loop != null && building.Border.Loop.Length >= 3)
+                return building.Border.Loop;
+
+            return building.Extrusion?.Loop;
+        }
+
+        private static Volume GetBuildingVolume(BuildingElement building)
+        {
+            if (building.Volume != null && building.Volume.Top > building.Volume.Bottom)
+                return building.Volume;
+
+            if (building.Extrusion == null)
+                return null;
+
+            return new Volume
+            {
+                Bottom = building.Extrusion.Bottom,
+                Top = building.Extrusion.Top
+            };
+        }
+
+        private static Vector2[] ToVector2Array(CheckPoint[] points)
+        {
+            Vector2[] result = new Vector2[points.Length];
+            for (int i = 0; i < points.Length; i++)
+            {
+                result[i] = new Vector2(points[i].X, points[i].Y);
+            }
+
+            return result;
+        }
+
+        private static Vector3 ToVector3(Point3D point)
+        {
+            if (point == null)
+                return Vector3.zero;
+
+            return new Vector3(point.X, point.Y, point.Z);
+        }
+
+        private static float[] GetDividingPlaneElevations(System.Collections.Generic.List<DividingPlane> dividingPlanes)
+        {
+            if (dividingPlanes == null || dividingPlanes.Count == 0)
+                return System.Array.Empty<float>();
+
+            float[] elevations = new float[dividingPlanes.Count];
+            for (int i = 0; i < dividingPlanes.Count; i++)
+            {
+                elevations[i] = dividingPlanes[i].Elevation;
+            }
+
+            return elevations;
         }
 
         private int ImportSite(EcsWorld world, Project project)
