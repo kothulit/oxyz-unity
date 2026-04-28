@@ -52,8 +52,9 @@ namespace ECS
                 float insertZ = placement.insertPoint.z;
                 float[] splitElevations = GetParentDividingPlaneElevations(hierarchy.ParentEntity, divisionPool);
                 SpatialBoundary[] boundaries = GetParentDividingBoundaries(hierarchy.ParentEntity, boundarySetPool);
+                bool useFullParentHeight = IsInsideLoopBoundary(boundaries, insertPlanPoint);
 
-                if (!TryResolveVerticalRange(parentVolumeSet, splitElevations, insertZ, out float bottom, out float top))
+                if (!TryResolveVerticalRange(parentVolumeSet, splitElevations, insertZ, useFullParentHeight, out float bottom, out float top))
                 {
                     Debug.LogWarning($"[ECS] Space skipped. InsertPoint.z is outside parent volume: {element.name}");
                     continue;
@@ -124,10 +125,26 @@ namespace ECS
             SpatialVolumeSet parentVolumeSet,
             float[] splitElevations,
             float insertZ,
+            bool useFullParentHeight,
             out float bottom,
             out float top)
         {
             GetVerticalBounds(parentVolumeSet, out float parentBottom, out float parentTop);
+
+            if (useFullParentHeight)
+            {
+                if (insertZ < parentBottom - ElevationEpsilon || insertZ > parentTop + ElevationEpsilon)
+                {
+                    bottom = 0f;
+                    top = 0f;
+                    return false;
+                }
+
+                bottom = parentBottom;
+                top = parentTop;
+                return true;
+            }
+
             List<float> elevations = BuildElevationSequence(parentBottom, parentTop, splitElevations);
 
             for (int i = 0; i < elevations.Count - 1; i++)
@@ -147,6 +164,23 @@ namespace ECS
 
             bottom = 0f;
             top = 0f;
+            return false;
+        }
+
+        private static bool IsInsideLoopBoundary(SpatialBoundary[] boundaries, Vector2 point)
+        {
+            if (boundaries == null)
+                return false;
+
+            for (int i = 0; i < boundaries.Length; i++)
+            {
+                SpatialBoundary boundary = boundaries[i];
+                if (boundary.shape != SpatialBoundaryShape.Loop)
+                    continue;
+                if (SpatialRegionSplitter.ContainsPoint(boundary.points, point))
+                    return true;
+            }
+
             return false;
         }
 
