@@ -71,7 +71,7 @@ namespace ECS
             switch (boundary.shape)
             {
                 case SpatialBoundaryShape.Loop:
-                    return SelectAfterLoop(region.points, boundary.points, point);
+                    return SelectAfterLoop(region, boundary.points, point);
                 case SpatialBoundaryShape.Beam:
                     return SelectAfterLine(region, boundary.points, point, requireSegmentCrossing: false);
                 case SpatialBoundaryShape.Piece:
@@ -81,12 +81,12 @@ namespace ECS
             }
         }
 
-        private static SpatialPlanRegion[] SelectAfterLoop(Vector2[] region, Vector2[] loop, Vector2 point)
+        private static SpatialPlanRegion[] SelectAfterLoop(SpatialPlanRegion region, Vector2[] loop, Vector2 point)
         {
             if (!IsValidPolygon(loop))
-                return new[] { new SpatialPlanRegion { points = CopyPoints(region) } };
+                return new[] { CopyRegion(region) };
 
-            if (!ContainsPoint(region, point))
+            if (!ContainsPoint(region.points, point))
                 return System.Array.Empty<SpatialPlanRegion>();
 
             if (ContainsPoint(loop, point))
@@ -97,14 +97,16 @@ namespace ECS
                 };
             }
 
-            if (TryCreateOutsideRegionBySharedEdge(region, loop, point, out SpatialPlanRegion outsideRegion))
+            if (TryCreateOutsideRegionBySharedEdge(region.points, loop, point, out SpatialPlanRegion outsideRegion))
                 return new[] { outsideRegion };
 
-            // MVP: outside of an inner loop is kept as the original region because holes
-            // are not represented yet in SpatialVolume.
             return new[]
             {
-                new SpatialPlanRegion { points = CopyPoints(region) }
+                new SpatialPlanRegion
+                {
+                    points = CopyPoints(region.points),
+                    holes = AppendHole(region.holes, loop)
+                }
             };
         }
 
@@ -348,6 +350,43 @@ namespace ECS
             for (int i = 0; i < source.Length; i++)
             {
                 copy[i] = source[i];
+            }
+
+            return copy;
+        }
+
+        private static SpatialPlanRegion CopyRegion(SpatialPlanRegion source)
+        {
+            return new SpatialPlanRegion
+            {
+                points = CopyPoints(source.points),
+                holes = CopyHoles(source.holes)
+            };
+        }
+
+        private static Vector2[][] AppendHole(Vector2[][] existingHoles, Vector2[] hole)
+        {
+            int existingCount = existingHoles?.Length ?? 0;
+            Vector2[][] result = new Vector2[existingCount + 1][];
+
+            for (int i = 0; i < existingCount; i++)
+            {
+                result[i] = CopyPoints(existingHoles[i]);
+            }
+
+            result[existingCount] = CopyPoints(hole);
+            return result;
+        }
+
+        private static Vector2[][] CopyHoles(Vector2[][] source)
+        {
+            if (source == null || source.Length == 0)
+                return null;
+
+            Vector2[][] copy = new Vector2[source.Length][];
+            for (int i = 0; i < source.Length; i++)
+            {
+                copy[i] = CopyPoints(source[i]);
             }
 
             return copy;

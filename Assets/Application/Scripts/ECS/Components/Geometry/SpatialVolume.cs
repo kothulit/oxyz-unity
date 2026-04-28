@@ -7,5 +7,6 @@ namespace ECS
         public float bottom;
         public float top;
         public Vector2[] points;
+        public Vector2[][] holes;
     }
 }

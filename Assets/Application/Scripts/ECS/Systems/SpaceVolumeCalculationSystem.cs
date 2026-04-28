@@ -254,7 +254,8 @@ namespace ECS
                     {
                         bottom = clippedBottom,
                         top = clippedTop,
-                        points = CopyPoints(selectedRegions[j].points)
+                        points = CopyPoints(selectedRegions[j].points),
+                        holes = CopyHoles(selectedRegions[j].holes)
                     });
                 }
             }
@@ -269,7 +270,8 @@ namespace ECS
         {
             var initialRegion = new SpatialPlanRegion
             {
-                points = parentPart.points
+                points = parentPart.points,
+                holes = parentPart.holes
             };
 
             if (boundaries == null || boundaries.Length == 0)
@@ -303,6 +305,20 @@ namespace ECS
             for (int i = 0; i < source.Length; i++)
             {
                 copy[i] = source[i];
+            }
+
+            return copy;
+        }
+
+        private static Vector2[][] CopyHoles(Vector2[][] source)
+        {
+            if (source == null || source.Length == 0)
+                return null;
+
+            Vector2[][] copy = new Vector2[source.Length][];
+            for (int i = 0; i < source.Length; i++)
+            {
+                copy[i] = CopyPoints(source[i]);
             }
 
             return copy;

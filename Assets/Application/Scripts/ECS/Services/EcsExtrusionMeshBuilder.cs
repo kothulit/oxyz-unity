@@ -24,15 +24,21 @@ namespace ECS
                 return null;
 
             List<Vector2> points = NormalizeWinding(new List<Vector2>(geometry.points));
+            List<List<Vector2>> holes = NormalizeHoles(geometry.holes);
+            List<Vector2> facePoints = BuildFaceContour(points, holes);
 
             var vertices = new List<Vector3>();
             var triangles = new List<int>();
 
-            List<int> faceTriangles = TriangulateEarClipping(points);
+            List<int> faceTriangles = TriangulateEarClipping(facePoints);
 
-            AddBottomFace(vertices, triangles, faceTriangles, points, geometry.bottom);
-            AddTopFace(vertices, triangles, faceTriangles, points, geometry.top);
-            AddSideFaces(vertices, triangles, points, geometry.bottom, geometry.top);
+            AddBottomFace(vertices, triangles, faceTriangles, facePoints, geometry.bottom);
+            AddTopFace(vertices, triangles, faceTriangles, facePoints, geometry.top);
+            AddSideFaces(vertices, triangles, points, geometry.bottom, geometry.top, reverseWinding: false);
+            for (int i = 0; i < holes.Count; i++)
+            {
+                AddSideFaces(vertices, triangles, holes[i], geometry.bottom, geometry.top, reverseWinding: true);
+            }
 
             var mesh = new Mesh();
             mesh.name = "BuildingExtrusionMesh";
@@ -74,7 +80,13 @@ namespace ECS
             }
         }
 
-        private static void AddSideFaces(List<Vector3> vertices, List<int> triangles, List<Vector2> points, float bottom, float top)
+        private static void AddSideFaces(
+            List<Vector3> vertices,
+            List<int> triangles,
+            List<Vector2> points,
+            float bottom,
+            float top,
+            bool reverseWinding)
         {
             for (int i = 0; i < points.Count; i++)
             {
@@ -90,14 +102,153 @@ namespace ECS
                 vertices.Add(ToUnityPoint(p1, top));
                 vertices.Add(ToUnityPoint(p0, top));
 
-                triangles.Add(start + 0);
-                triangles.Add(start + 2);
-                triangles.Add(start + 1);
+                if (reverseWinding)
+                {
+                    triangles.Add(start + 0);
+                    triangles.Add(start + 1);
+                    triangles.Add(start + 2);
 
-                triangles.Add(start + 0);
-                triangles.Add(start + 3);
-                triangles.Add(start + 2);
+                    triangles.Add(start + 0);
+                    triangles.Add(start + 2);
+                    triangles.Add(start + 3);
+                }
+                else
+                {
+                    triangles.Add(start + 0);
+                    triangles.Add(start + 2);
+                    triangles.Add(start + 1);
+
+                    triangles.Add(start + 0);
+                    triangles.Add(start + 3);
+                    triangles.Add(start + 2);
+                }
             }
+        }
+
+        private static List<Vector2> BuildFaceContour(List<Vector2> outer, List<List<Vector2>> holes)
+        {
+            var contour = new List<Vector2>(outer);
+
+            for (int i = 0; i < holes.Count; i++)
+            {
+                contour = BridgeHole(contour, holes[i]);
+            }
+
+            return contour;
+        }
+
+        private static List<Vector2> BridgeHole(List<Vector2> contour, List<Vector2> hole)
+        {
+            int holeIndex = GetRightmostPointIndex(hole);
+            Vector2 holePoint = hole[holeIndex];
+
+            if (!TryFindRightRayIntersection(contour, holePoint, out int contourEdgeStartIndex, out Vector2 bridgePoint))
+            {
+                contourEdgeStartIndex = GetNearestVisiblePointIndex(contour, holePoint);
+                bridgePoint = contour[contourEdgeStartIndex];
+            }
+
+            var bridged = new List<Vector2>();
+            for (int i = 0; i <= contourEdgeStartIndex; i++)
+            {
+                bridged.Add(contour[i]);
+            }
+
+            bridged.Add(bridgePoint);
+            bridged.Add(holePoint);
+            for (int i = 1; i < hole.Count; i++)
+            {
+                int index = (holeIndex + i) % hole.Count;
+                bridged.Add(hole[index]);
+            }
+            bridged.Add(holePoint);
+            bridged.Add(bridgePoint);
+
+            for (int i = contourEdgeStartIndex + 1; i < contour.Count; i++)
+            {
+                bridged.Add(contour[i]);
+            }
+
+            return bridged;
+        }
+
+        private static bool TryFindRightRayIntersection(
+            List<Vector2> contour,
+            Vector2 point,
+            out int edgeStartIndex,
+            out Vector2 intersection)
+        {
+            edgeStartIndex = -1;
+            intersection = Vector2.zero;
+            float bestX = float.PositiveInfinity;
+
+            for (int i = 0; i < contour.Count; i++)
+            {
+                int next = (i + 1) % contour.Count;
+                Vector2 a = contour[i];
+                Vector2 b = contour[next];
+
+                if (!TryIntersectHorizontalRay(point, a, b, out Vector2 candidate))
+                    continue;
+                if (candidate.x <= point.x)
+                    continue;
+                if (candidate.x >= bestX)
+                    continue;
+
+                bestX = candidate.x;
+                edgeStartIndex = i;
+                intersection = candidate;
+            }
+
+            return edgeStartIndex >= 0;
+        }
+
+        private static bool TryIntersectHorizontalRay(Vector2 origin, Vector2 a, Vector2 b, out Vector2 intersection)
+        {
+            intersection = Vector2.zero;
+
+            if (Mathf.Abs(a.y - b.y) <= Mathf.Epsilon)
+                return false;
+            if (origin.y < Mathf.Min(a.y, b.y) || origin.y > Mathf.Max(a.y, b.y))
+                return false;
+
+            float t = (origin.y - a.y) / (b.y - a.y);
+            if (t < 0f || t > 1f)
+                return false;
+
+            float x = Mathf.Lerp(a.x, b.x, t);
+            intersection = new Vector2(x, origin.y);
+            return true;
+        }
+
+        private static int GetRightmostPointIndex(List<Vector2> points)
+        {
+            int result = 0;
+            for (int i = 1; i < points.Count; i++)
+            {
+                if (points[i].x > points[result].x || Mathf.Approximately(points[i].x, points[result].x) && points[i].y < points[result].y)
+                    result = i;
+            }
+
+            return result;
+        }
+
+        private static int GetNearestVisiblePointIndex(List<Vector2> contour, Vector2 point)
+        {
+            int result = 0;
+            float bestDistance = float.PositiveInfinity;
+
+            for (int i = 0; i < contour.Count; i++)
+            {
+                float distance = (contour[i] - point).sqrMagnitude;
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    result = i;
+                }
+            }
+
+            return result;
         }
 
         private static Vector3 ToUnityPoint(Vector2 planPoint, float z)
@@ -155,7 +306,7 @@ namespace ECS
             Vector2 ab = b - a;
             Vector2 bc = c - b;
             float cross = ab.x * bc.y - ab.y * bc.x;
-            // Ïîñëå NormalizeWinding ó íàñ îæèäàåòñÿ CCW-êîíòóð.
+            // ˜˜˜˜˜ NormalizeWinding ˜ ˜˜˜ ˜˜˜˜˜˜˜˜˜ CCW-˜˜˜˜˜˜.
             return cross > 0f;
         }
 
@@ -172,6 +323,8 @@ namespace ECS
             foreach (int index in remaining)
             {
                 if (index == aIndex || index == bIndex || index == cIndex)
+                    continue;
+                if (IsSamePoint(points[index], a) || IsSamePoint(points[index], b) || IsSamePoint(points[index], c))
                     continue;
                 if (IsPointInsideTriangle(points[index], a, b, c))
                     return true;
@@ -196,6 +349,11 @@ namespace ECS
             return a.x * b.y - a.y * b.x;
         }
 
+        private static bool IsSamePoint(Vector2 a, Vector2 b)
+        {
+            return (a - b).sqrMagnitude <= 0.000001f;
+        }
+
         private static List<Vector2> NormalizeWinding(List<Vector2> points)
         {
             float signedArea = GetSignedArea(points);
@@ -205,6 +363,27 @@ namespace ECS
                 points.Reverse();
 
             return points;
+        }
+
+        private static List<List<Vector2>> NormalizeHoles(Vector2[][] holes)
+        {
+            var result = new List<List<Vector2>>();
+            if (holes == null)
+                return result;
+
+            for (int i = 0; i < holes.Length; i++)
+            {
+                if (holes[i] == null || holes[i].Length < 3)
+                    continue;
+
+                var hole = new List<Vector2>(holes[i]);
+                if (GetSignedArea(hole) > 0f)
+                    hole.Reverse();
+
+                result.Add(hole);
+            }
+
+            return result;
         }
 
         private static float GetSignedArea(List<Vector2> points)
