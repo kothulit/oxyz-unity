@@ -72,19 +72,21 @@ namespace ECS
 
         private static Material CreateSpaceMaterial(Material defaultMaterial, int seed)
         {
+            bool isOpaque = false;
+
             Material material = defaultMaterial != null
                 ? new Material(defaultMaterial)
                 : new Material(Shader.Find("Standard"));
 
             Color color = Color.HSVToRGB((seed * 0.17f) % 1f, 0.35f, 0.95f);
-            color.a = 1f;
+            color.a = 0.25f;
 
             if (material.HasProperty("_BaseColor"))
                 material.SetColor("_BaseColor", color);
             if (material.HasProperty("_Color"))
                 material.SetColor("_Color", color);
 
-            ConfigureOpaqueMaterial(material);
+            if (isOpaque) ConfigureOpaqueMaterial(material);
 
             return material;
         }
