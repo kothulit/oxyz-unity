@@ -1,8 +1,8 @@
+using Oxyz.Xml.Serializable;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using Oxyz.Xml.Serializable;
 
 public sealed class ProjectLoader : IProjectLoader
 {
@@ -28,14 +28,16 @@ public sealed class ProjectLoader : IProjectLoader
         // 3) Materials
         string materialsRoot = Path.Combine(root, "Material");
         var materialsByName = LoadMaterials(materialsRoot);
-        
-        return new Project
+
+        Project result = new()
         {
             RootPath = root,
             Document = document,
             StylesByName = stylesByName,
             MaterialsByName = materialsByName
         };
+
+        return result;
     }
 
     private static string FindDocumentXmlPath(string root)
@@ -98,6 +100,7 @@ public sealed class ProjectLoader : IProjectLoader
         }
         return result;
     }
+
     private static T DeserializeFromFile<T>(string path)
     {
         var serializer = new XmlSerializer(typeof(T));

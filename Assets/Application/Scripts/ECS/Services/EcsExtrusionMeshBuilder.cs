@@ -412,7 +412,7 @@ namespace ECS
             Vector2 ab = b - a;
             Vector2 bc = c - b;
             float cross = ab.x * bc.y - ab.y * bc.x;
-            // ˜˜˜˜˜ NormalizeWinding ˜ ˜˜˜ ˜˜˜˜˜˜˜˜˜ CCW-˜˜˜˜˜˜.
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ NormalizeWinding ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CCW-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
             return cross > 0f;
         }
 

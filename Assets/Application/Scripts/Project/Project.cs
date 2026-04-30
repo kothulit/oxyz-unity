@@ -8,4 +8,5 @@ public class Project
 
     public Dictionary<string, Style> StylesByName { get; set; }
     public Dictionary<string, Material> MaterialsByName { get; set; }
+    public Dictionary<string, SpaceElement> Spaces {  get; set; }
 }
