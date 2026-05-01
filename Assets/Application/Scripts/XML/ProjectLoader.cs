@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 public sealed class ProjectLoader : IProjectLoader
 {
+    private Guid _guid = Gui
     public Project Load(string projectRootPath)
     {
         if (string.IsNullOrWhiteSpace(projectRootPath))
