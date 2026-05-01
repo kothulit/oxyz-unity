@@ -8,16 +8,16 @@ namespace Oxyz.Xml.Serializable
     {
         [XmlArray("DefaultStyles")]
         [XmlArrayItem("DefaultStyle")]
-        public List<DefaultStyle> Defaults { get; set; } = new();
+        public List<DefaultStyle> Defaults { get; set; } = null;
 
         [XmlAttribute("x")]
-        public float InsertX { get; set; }
+        public float InsertX { get; set; } = float.MinValue;
 
         [XmlAttribute("y")]
-        public float InsertY { get; set; }
+        public float InsertY { get; set; } = float.MinValue;
 
         [XmlAttribute("z")]
-        public float InsertZ { get; set; }
+        public float InsertZ { get; set; } = float.MinValue;
 
         [XmlIgnore]
         public Point3D InsertPoint
@@ -33,14 +33,14 @@ namespace Oxyz.Xml.Serializable
 
         [XmlArray("DividingPlanes")]
         [XmlArrayItem("DividingPlane")]
-        public List<DividingPlane> DividingPlanes { get; set; } = new();
+        public List<DividingPlane> DividingPlanes { get; set; } = null;
 
         [XmlArray("DividingBoundaries")]
         [XmlArrayItem("DividingBoundary")]
-        public List<DividingBoundary> DividingBoundaries { get; set; } = new();
+        public List<DividingBoundary> DividingBoundaries { get; set; } = null;
 
         [XmlArray("Spaces")]
         [XmlArrayItem("Space")]
-        public List<SpaceElement> Spaces { get; set; } = new();
+        public List<SpaceElement> Spaces { get; set; } = null;
     }
 }
