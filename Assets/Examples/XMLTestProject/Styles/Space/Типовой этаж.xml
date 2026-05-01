@@ -1,0 +1,16 @@
+<Style name="Типовой этаж" guid="c215360a-adcb-4fd6-a07c-3b0526251523" category="Space">
+  <Space style="">
+    <DividingBoundaries>
+      <DividingBoundary shape="Loop">
+        <CheckPoint x="1" y="1"/>
+        <CheckPoint x="3" y="1"/>
+        <CheckPoint x="3" y="3"/>
+        <CheckPoint x="1" y="3"/>
+      </DividingBoundary>
+    </DividingBoundaries>
+    <Spaces>
+      <Space name="Помещение 1" guid="78093e9a-6951-4e32-a5d9-463d28fc8991" x="0" y="0" z="0"/>
+      <Space name="Помещение 2" guid="1c5a89a2-6b60-4405-a5bf-ba17a0645585" x="2" y="2" z="0"/>
+    </Spaces>
+  </Space>
+</Style>
