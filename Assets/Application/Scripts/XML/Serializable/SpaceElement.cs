@@ -11,30 +11,27 @@ namespace Oxyz.Xml.Serializable
         public List<DefaultStyle> Defaults { get; set; }
 
         [XmlAttribute("x")]
-        public float? InsertX { get; set; }
-
+        public float InsertX { get; set; }
+        [XmlIgnore]
+        public bool InsertXSpecified { get; set; }
         [XmlAttribute("y")]
-        public float? InsertY { get; set; }
-
+        public float InsertY { get; set; }
+        [XmlIgnore]
+        public bool InsertYSpecified { get; set; }
         [XmlAttribute("z")]
-        public float? InsertZ { get; set; }
+        public float InsertZ { get; set; }
+        [XmlIgnore]
+        public bool InsertZSpecified { get; set; }
 
         [XmlIgnore]
         public Point3D InsertPoint
         {
-            get
-            {
-                if (InsertX != null && InsertY != null && InsertZ == null)
-                    return new Point3D { X = InsertX.Value, Y = InsertY.Value, Z = .0f };
-                if (InsertX != null && InsertY != null && InsertZ != null)
-                    return new Point3D { X = InsertX.Value, Y = InsertY.Value, Z = InsertZ.Value };
-                return null;
-            }
+            get => new Point3D { X = InsertX, Y = InsertY, Z = InsertZ };
             set
             {
-                InsertX = value?.X ?? 0f;
-                InsertY = value?.Y ?? 0f;
-                InsertZ = value?.Z ?? 0f;
+                InsertX = value?.X ?? 0.0f;
+                InsertY = value?.Y ?? 0.0f;
+                InsertZ = value?.Z ?? 0.0f;
             }
         }
 
