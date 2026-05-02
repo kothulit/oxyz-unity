@@ -8,21 +8,28 @@ namespace Oxyz.Xml.Serializable
     {
         [XmlArray("DefaultStyles")]
         [XmlArrayItem("DefaultStyle")]
-        public List<DefaultStyle> Defaults { get; set; } = null;
+        public List<DefaultStyle> Defaults { get; set; }
 
         [XmlAttribute("x")]
-        public float InsertX { get; set; } = float.MinValue;
+        public float? InsertX { get; set; }
 
         [XmlAttribute("y")]
-        public float InsertY { get; set; } = float.MinValue;
+        public float? InsertY { get; set; }
 
         [XmlAttribute("z")]
-        public float InsertZ { get; set; } = float.MinValue;
+        public float? InsertZ { get; set; }
 
         [XmlIgnore]
         public Point3D InsertPoint
         {
-            get => new Point3D { X = InsertX, Y = InsertY, Z = InsertZ };
+            get
+            {
+                if (InsertX != null && InsertY != null && InsertZ == null)
+                    return new Point3D { X = InsertX.Value, Y = InsertY.Value, Z = .0f };
+                if (InsertX != null && InsertY != null && InsertZ != null)
+                    return new Point3D { X = InsertX.Value, Y = InsertY.Value, Z = InsertZ.Value };
+                return null;
+            }
             set
             {
                 InsertX = value?.X ?? 0f;
@@ -33,14 +40,14 @@ namespace Oxyz.Xml.Serializable
 
         [XmlArray("DividingPlanes")]
         [XmlArrayItem("DividingPlane")]
-        public List<DividingPlane> DividingPlanes { get; set; } = null;
+        public List<DividingPlane> DividingPlanes { get; set; }
 
         [XmlArray("DividingBoundaries")]
         [XmlArrayItem("DividingBoundary")]
-        public List<DividingBoundary> DividingBoundaries { get; set; } = null;
+        public List<DividingBoundary> DividingBoundaries { get; set; }
 
         [XmlArray("Spaces")]
         [XmlArrayItem("Space")]
-        public List<SpaceElement> Spaces { get; set; } = null;
+        public List<SpaceElement> Spaces { get; set; }
     }
 }
