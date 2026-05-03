@@ -1,5 +1,5 @@
-<Style name="Стиль Квартира 1к" guid="6307c908-3de0-4e9a-8919-2f2df6df403b" category="Space">
-  <Space name="Квартира 1к" guid="3f34743a-bdc3-4b7f-a8ce-fb5c574021e2">
+<Style name="Стиль Квартира 1к1" guid="6307c908-3de0-4e9a-8919-2f2df6df403b" category="Space">
+  <Space name="Квартира 1к1" guid="3f34743a-bdc3-4b7f-a8ce-fb5c574021e2">
     <DividingBoundaries>
       <DividingBoundary shape="Beam">
         <CheckPoint x="0" y="0.8"/>

@@ -1,0 +1,29 @@
+<Style name="Стиль Квартира 2к1" guid="1d98ecd7-f902-48aa-a21b-108c7c5d7ae9" category="Space">
+  <Space name="Квартира 2к1" guid="ff8c8668-f688-49c5-a48b-4cd4dd0eacbe">
+    <DividingBoundaries>
+      <DividingBoundary shape="Beam">
+        <CheckPoint x="-0.64" y="0.0"/>
+        <CheckPoint x="-0.64" y="0.82"/>
+        <CheckPoint x="0.53" y="1.2"/>
+        <CheckPoint x="2.1" y="1.2"/>
+        <CheckPoint x="2.1" y="0.0"/>
+      </DividingBoundary>
+      <DividingBoundary shape="Beam">
+        <CheckPoint x="2.1" y="0.89"/>
+        <CheckPoint x="5.56" y="0.89"/>
+        <CheckPoint x="5.56" y="0.0"/>
+      </DividingBoundary>
+      <DividingBoundary shape="Beam">
+        <CheckPoint x="5.32" y="0.89"/>
+        <CheckPoint x="5.32" y="1.0"/>
+      </DividingBoundary>
+    </DividingBoundaries>
+    <Spaces>
+      <Space name="Гостинная" guid="b60006f3-96d4-4b7a-9f69-6597a49b83cf" x="3.2" y="2.1" z="0"/>
+      <Space name="Спальня" guid="4afbcdc1-17ea-4fc7-8bfd-c40e9962eced" x="-1.0" y="1.2" z="0"/>
+      <Space name="Кухня" guid="38ac286a-d52e-4fe4-bbc9-9e62521871ca" x="6.5" y="1.4" z="0"/>
+      <Space name="Санузел" guid="1db96b8d-954a-4b01-9214-a181975c5f4d" x="3.8" y="0.0" z="0"/>
+      <Space name="Коридор" guid="22b2cc86-a694-437f-bfc8-763a78076209" x="0.85" y="0.85" z="0"/>
+    </Spaces>
+  </Space>
+</Style>
