@@ -1,0 +1,20 @@
+<Style name="Стиль Квартира 1к" guid="6307c908-3de0-4e9a-8919-2f2df6df403b" category="Space">
+  <Space name="Квартира 1к" guid="3f34743a-bdc3-4b7f-a8ce-fb5c574021e2">
+    <DividingBoundaries>
+      <DividingBoundary shape="Beam">
+        <CheckPoint x="0" y="0.8"/>
+        <CheckPoint x="0.975" y="0.8"/>
+        <CheckPoint x="0.975" y="0.0"/>
+      </DividingBoundary>
+      <DividingBoundary shape="Beam">
+        <CheckPoint x="0.975" y="0.575"/>
+        <CheckPoint x="1.0" y="0.575"/>
+      </DividingBoundary>
+    </DividingBoundaries>
+    <Spaces>
+      <Space name="Гостинная" guid="0ab57b4f-7656-40dd-85c4-5315f89b26c0" x="-0.1" y="-0.1" z="0"/>
+      <Space name="Кухня" guid="eb0b760e-3b6b-4010-aeea-cf310179e44e" x="0.0" y="1.0" z="0"/>
+      <Space name="Санузел" guid="fae18d1f-4cdf-43ba-a6a4-0af8f690413e" x="1.0" y="0.0" z="0"/>
+    </Spaces>
+  </Space>
+</Style>
