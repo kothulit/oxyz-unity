@@ -15,19 +15,21 @@ public sealed class ProjectLoader : IProjectLoader
         if (!Directory.Exists(root))
             throw new DirectoryNotFoundException($"Project folder not found: {root}");
 
-        // 1) Document
+        // Document
         string documentPath = FindDocumentXmlPath(root);
         if (!File.Exists(documentPath))
             throw new FileNotFoundException($"Document file not found: {documentPath}");
         Document document = DeserializeFromFile<Document>(documentPath);
 
-        // 2) Styles
+        // Styles
         string stylesRoot = Path.Combine(root, "Styles");
         var stylesByName = LoadStyles(stylesRoot);
 
-        // 3) Materials
+        // Materials
         string materialsRoot = Path.Combine(root, "Material");
         var materialsByName = LoadMaterials(materialsRoot);
+
+        // !!!загрузка Space не реализована
 
         Project result = new()
         {

@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"3badcc5a019e8a29","type":"text","text":"Папка Project","x":-720,"y":40,"width":160,"height":50},
+		{"id":"b5a2ded8a822c3df","type":"text","text":"XML Document","x":-1000,"y":40,"width":160,"height":60},
+		{"id":"3231ea73a0ffd9f1","type":"text","text":"Styles","x":-1000,"y":-40,"width":160,"height":60},
+		{"id":"68dbcc71096b7163","type":"text","text":"Materials","x":-1000,"y":120,"width":160,"height":60},
+		{"id":"fdaf1528e47414b3","type":"text","text":"ProjectLoader","x":-440,"y":40,"width":160,"height":50},
+		{"id":"aff615f29450b3b1","type":"text","text":"Project","x":-160,"y":40,"width":160,"height":50},
+		{"id":"d90325426d0a4b2f","type":"text","text":"ProjectSession","x":-160,"y":160,"width":160,"height":50}
+	],
+	"edges":[
+		{"id":"677c9efdc63dcc8e","fromNode":"b5a2ded8a822c3df","fromSide":"right","toNode":"3badcc5a019e8a29","toSide":"left"},
+		{"id":"e7c5d612474567a6","fromNode":"3231ea73a0ffd9f1","fromSide":"right","toNode":"3badcc5a019e8a29","toSide":"left"},
+		{"id":"afa689eebb3e74f0","fromNode":"68dbcc71096b7163","fromSide":"right","toNode":"3badcc5a019e8a29","toSide":"left"},
+		{"id":"0815112b6bad1ea9","fromNode":"fdaf1528e47414b3","fromSide":"left","toNode":"3badcc5a019e8a29","toSide":"right"},
+		{"id":"aa64be95a1778e70","fromNode":"aff615f29450b3b1","fromSide":"left","toNode":"fdaf1528e47414b3","toSide":"right"},
+		{"id":"b6b8cf75da8c0b66","fromNode":"d90325426d0a4b2f","fromSide":"top","toNode":"aff615f29450b3b1","toSide":"bottom"}
+	]
+}

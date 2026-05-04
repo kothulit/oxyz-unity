@@ -25,14 +25,17 @@
             "id": "5b987bea67021bef",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Наследование свойств.md",
-                "mode": "source",
-                "source": false
+                "file": "Архитектура приложения/Без названия.canvas",
+                "viewState": {
+                  "x": 42,
+                  "y": 68.99999290466309,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "Наследование свойств"
+              "icon": "lucide-layout-dashboard",
+              "title": "Без названия"
             }
           }
         ],
@@ -200,9 +203,16 @@
   },
   "active": "5b987bea67021bef",
   "lastOpenFiles": [
+    "Архитектура приложения.meta",
+    "Архитектура приложения/Без названия.canvas.meta",
+    "Наследование свойств.md",
+    "Архитектура приложения/Без названия.canvas",
+    "Архитектура приложения/Без названия.md",
+    "Архитектура приложения",
+    "Без названия.base",
+    "Без названия 1.base",
     "Наследование свойств.md.meta",
     "Space.md",
-    "Наследование свойств.md",
     "Oxyz Game Design Document.md",
     "Разделение пространств.md",
     "Основные принципы.md",
@@ -213,11 +223,6 @@
     "Основные принципы.md.meta",
     "XML представление модели/XML представление.md.meta",
     "XML представление модели.meta",
-    "Space.md.meta",
-    "Oxyz Game Design Document.md.meta",
-    "XML представление модели/_resources.meta",
-    "XML представление модели/_resources/Сущности XML.meta",
-    "XML представление модели/_resources/Сущности XML",
     "XML.md",
     "Добро пожаловать.md"
   ]
