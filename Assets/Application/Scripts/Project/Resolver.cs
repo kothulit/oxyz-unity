@@ -1,6 +1,5 @@
 using Oxyz.Xml.Serializable;
 using System.Collections.Generic;
-using UnityEngine;
 
 //Клас для реализаци каскадного наследования. Задаем контекст с данными из соответствующего
 //стиля и подставляем из него значения если их нет в объекте
@@ -29,12 +28,12 @@ public class Resolver
             return instance;
         return new SpaceElement
         {
-            Name = IsSet(instance.Name) ? instance.Name : fallback.Name,
-            GUID = IsSet(instance.GUID) ? instance.GUID : fallback.GUID,
-            Style = instance.Style,
-            InsertX = IsSet(instance.InsertX) ? instance.InsertX : fallback.InsertX,
-            InsertY = IsSet(instance.InsertY) ? instance.InsertY : fallback.InsertY,
-            InsertZ = IsSet(instance.InsertZ) ? instance.InsertZ : fallback.InsertZ,
+            Name = instance.NameSpecified ? instance.Name : fallback.Name,
+            GUID = instance.GuidSpecified ? instance.GUID : fallback.GUID,
+            Style = instance.StyleSpecified ? instance.Style : fallback.Style,
+            InsertX = instance.InsertXSpecified ? instance.InsertX : fallback.InsertX,
+            InsertY = instance.InsertYSpecified ? instance.InsertY : fallback.InsertY,
+            InsertZ = instance.InsertZSpecified ? instance.InsertZ : fallback.InsertZ,
             DividingPlanes = instance.DividingPlanes ?? fallback.DividingPlanes,
             DividingBoundaries = instance.DividingBoundaries ?? fallback.DividingBoundaries,
             Spaces = instance.Spaces ?? fallback.Spaces,
